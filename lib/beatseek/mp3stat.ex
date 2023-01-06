@@ -75,6 +75,33 @@ defmodule Beatseek.MP3Stat do
     _ -> {:error, :bad_file}
   end
 
+  def parse(path, no_duration: true) do
+    stat = File.stat!(path)
+    {tag_info, _rest} = parse_tag(File.read!(path))
+
+    title = Enum.at(tag_info["TIT2"] || [], 0)
+    album = Enum.at(tag_info["TALB"] || [], 0)
+    artist = Enum.at(tag_info["TPE1"] || [], 0)
+    year = Enum.at(tag_info["TDRC"] || [], 0)
+    genre = Enum.at(tag_info["TCON"] || [], 0)
+
+    {:ok,
+     %MP3Stat{
+       duration: 0,
+       size: stat.size,
+       path: path,
+       tags: tag_info,
+       title: title,
+       album: album,
+       artist: artist,
+       year: year,
+       genre: genre
+     }}
+
+  rescue
+    _ -> {:error, :bad_file}
+  end
+
   defp parse_tag(<<
          "ID3",
          major_version::integer,
