@@ -1,4 +1,4 @@
-# Discography Prototype
+# Discography Prototype :: ID3 Reader
 
 ```elixir
 Mix.install([

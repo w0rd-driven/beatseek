@@ -1,0 +1,314 @@
+# Discography Prototype :: Music API Requests
+
+```elixir
+Mix.install([
+  {:req, "~> 0.3.4"},
+  {:spotify_ex, "~> 2.3"}
+])
+```
+
+## Summary
+
+From our earlier prototype, we should have a list of Artists and the existing albums on our computer.
+
+From that list, we should get a sampling of up to 20-30 artists. We'll start with a known sampling of 5 or so before we exhaust API rate limits.
+
+The goal of this prototype is to find an acceptable API that produces the least artifacts. We should be able to use `String.jaro_distance` to also look for similar albums.
+
+### APIs
+
+1. `MusicBrainz`
+2. `TheAudioDB`
+3. `Discogs`
+4. `Spotify`
+
+## Conclusion
+
+Spotify is likely what we'll go with, primarily because good size images are included for both artist and albums.
+ID3 tags would at most likely just cover the album image if present.
+It may be worth attempting to incorporate all of them or to at least determine a baseline data set I can try to fill in from the various sources.
+
+### Notes
+
+1. `MusicBrainz` was simple enough and may cover the primary use case of getting studio albums.
+   There are potential pitfalls in picking the wrong artist `mbid` value but so far that hasn't happened.
+   I am a fan of free APIs though, there's so much less hassle.
+2. `TheAudioDB` was simple enough to work with but just the title and year may be too little information.
+3. `Discogs` is surprisingly robust and works with just a personal access token. 
+   We can setup an OAuth flow but I would likely take the approach we've used here over that.
+   The image dimensions don't match Spotify but that may be an adequate sacrifice.
+   There are fewer requests with this and `TheAudioDB` though.
+   Skipping the artist lookup does have its perks.
+4. `Spotify` is kind of a no-brainer but I don't personally use Spotify because I don't pay for it and I'm not a fan of the shuffle freemium model that Amazon Music is now emulating.
+   Amazon Music was my primary way of listening to music outside of my iTunes collection before the change and the best way for me to discover new artists.
+   Spotify makes the most sense if I plan on offering some sort of integration.
+   We could likely drop in a player widget rather easily or leverage the `uri` to open the app on my laptop.
+
+I'm trying to keep the scope to just the feature of being notified of new releases or albums I don't currently have in my iTunes collection.
+I like how I've sometimes been greeted with a notification for a new album for a particular artist in my collection and I want to expand that to cover anything potentially missing in my collection.
+Knowing what I'm missing would help me procure those albums.
+If this morphs into a personal streaming application or an iTunes clone, knowing all of these options may help us not get bogged down by a particular implementation.
+Something essentially competing with Spotify using their API may eventually become a problem so it's good to have all these options and there are potentially others like `Last.fm` to throw a random name out there.
+
+## MusicBrainz
+
+### Notes
+
+This API seems free as in beer without any authentication restrictions.
+This may be the most comprehensive database but it feels hard to reason about albums I care about and the right live or compilation types.
+
+```elixir
+# See https://musicbrainz.org/doc/MusicBrainz_API
+base_url = "https://musicbrainz.org/ws/2/"
+
+headers = [
+  # {"user-agent", ""},
+  {"content-type", "application/json"},
+  {"accept", "application/json"}
+]
+
+parameters = %{
+  # "query" => "Periphery"
+  # "query" => "Tool"
+  # "query" => "Kendrick Lamar"
+  "query" => "Atreyu"
+}
+
+url = "#{base_url}artist"
+
+# Get the MBID
+request = Req.new(http_errors: :raise)
+# xml = Req.get!(request, url: url, headers: headers, json: body)
+json = Req.get!(request, url: url, headers: headers, params: parameters).body
+
+mbid =
+  json
+  |> Map.fetch!("artists")
+  |> Enum.at(0)
+  |> Map.fetch!("id")
+
+# /ws/2/release-group?artist=410c9baf-5469-44f6-9852-826524b80c61&type=album
+parameters = %{
+  # "artist" => "a0cef17a-4574-44f4-9f97-fd068615dac6",
+  "artist" => mbid,
+  "type" => "album"
+}
+
+url = "#{base_url}release-group"
+
+request = Req.new(http_errors: :raise)
+json = Req.get!(request, url: url, headers: headers, params: parameters).body
+
+json
+|> Map.fetch!("release-groups")
+|> Enum.map(fn album ->
+  album
+  |> IO.inspect()
+
+  %{
+    "date" => album["first-release-date"],
+    "title" => album["title"],
+    "secondary-types" => album["secondary-types"]
+  }
+end)
+```
+
+## TheAudioDB
+
+### Notes
+
+I honestly ruled this one out by having problems late last night.
+I look at the link before I try to close it this morning (https://theaudiodb.com/api_guide.php) and I noticed this instead.
+We only care about `Return Discography for an Artist with Album names and year only` here, I don't know how I missed it.
+
+```elixir
+# https://www.theaudiodb.com/api/v1/json/2/search.php?s=coldplay
+base_url = "https://theaudiodb.com/api/v1/json/2/discography.php"
+
+headers = [
+  # {"user-agent", ""},
+  {"content-type", "application/json"},
+  {"accept", "application/json"}
+]
+
+parameters = %{
+  # "s" => "Periphery"
+  # "s" => "Tool"
+  # "s" => "Kendrick Lamar"
+  "s" => "Atreyu"
+}
+
+url = "#{base_url}"
+
+request = Req.new(http_errors: :raise)
+
+json =
+  Req.get!(request, url: url, headers: headers, params: parameters).body
+  |> IO.inspect(limit: :infinity)
+
+json
+|> Map.fetch!("album")
+|> Enum.map(fn album ->
+  album
+  |> IO.inspect()
+
+  %{
+    "date" => album["intYearReleased"],
+    "title" => album["strAlbum"]
+  }
+end)
+```
+
+## Discogs
+
+### Get a New Token
+
+1. Login to the developer section at https://www.discogs.com/settings/developers.
+   You'll need to create an account for this.
+2. Click the `Generate new token` button.
+3. Ideally, we'd set up a `DISCOGS_TOKEN` secret like we have with `Spotify` and paste the value there.
+   Currently we paste the value in our authorization header.
+   Alternatively, it can be passed as as the `token` query string parameter.
+
+### Notes
+
+This is probably the most complete as it includes pictures and thumbnails. I'll likely be committing my personal key but I can rotate that rather easily so I'm not too pressed. Images may be present in the ID3 information so I'm not super worried about including them but they would make for a better UI.
+
+I am really after studio albums as I don't generally care for compilations, live albums, or EPs. This seems to have them all but filtering them down to what I care about could be a little tricky. Too much information is probably a good thing though because I can't vouch for the validity of these just yet. At some point I may need to compare the output of each sample to see where the cracks are.
+
+```elixir
+# https://api.discogs.com/database/search?q=Nirvana&token=abcxyz123456
+base_url = "https://api.discogs.com/database/search"
+
+headers = [
+  # {"user-agent", ""},
+  {"content-type", "application/json"},
+  {"accept", "application/json"},
+  {"Authorization", "Discogs token=FMfcYkefJyVcGHxmLWOxnxzrMHTuZsDklqUFVULN"}
+]
+
+parameters = %{
+  # "s" => "Periphery"
+  # "s" => "Tool"
+  # "s" => "Kendrick Lamar"
+  "q" => "Atreyu",
+  "type" => "release"
+}
+
+url = "#{base_url}"
+
+request = Req.new(http_errors: :raise)
+
+json =
+  Req.get!(request, url: url, headers: headers, params: parameters).body
+  |> IO.inspect(limit: :infinity)
+
+json
+|> Map.fetch!("results")
+|> Enum.map(fn album ->
+  album
+  |> IO.inspect()
+
+  if album["type"] == "release" do
+    %{
+      "date" => album["year"],
+      "title" => album["title"],
+      "formats" => album["formats"],
+      "cover_image" => album["cover_image"],
+      "thumb" => album["thumb"]
+    }
+  end
+end)
+```
+
+## Spotify
+
+### Get a New Token
+
+1. Go to a url in the console like https://developer.spotify.com/console/get-artist-albums/
+2. Click the `GET TOKEN` button. You may need to login.
+3. Create the `SPOTIFY_TOKEN` secret in Livebook and paste the value.
+
+### Notes
+
+Spotify is seemingly the industry standard(tm) or at least something I'm more familiar with having done a take home asignment using the API.
+I'm currently using the developer console to get an OAuth token but our real application will need the client id, secret, and to handle the OAuth callback.
+The example application at https://github.com/jsncmgs1/spotify_ex_test is likely what we want here given there is a flow to requests, usually requiring a supervised process.
+It also handles pagination, which could be a thing I'm not really covering.
+
+I had thought I could easily make a worst tracks feature instead of `artist/id/top-tracks` as part of extra credit for a new version of the take home assignment. 
+It looks like to do that you would have to get the tracks for every album then inspect the popularity.
+This is technically doable it looks like but you have to make a request for tracks by album.
+
+I think the approach taken in this Livebook is okay for prototyping and Kendrick has 18 albums by count so pagination isn't really a problem at the moment.
+We can likely also bump the limit if we need to.
+I was honestly worried I couldn't prototype this as easily but it looks like this notebook wraps up nicely.
+
+```elixir
+base_url = "https://api.spotify.com/v1/"
+
+headers = [
+  # {"user-agent", ""},
+  {"content-type", "application/json"},
+  {"accept", "application/json"},
+  {"Authorization", "Bearer #{System.get_env("LB_SPOTIFY_TOKEN")}"}
+]
+
+parameters = %{
+  # "q" => "Periphery",
+  # "q" => "Tool",
+  # "q" => "Kendrick Lamar",
+  "q" => "Atreyu",
+  "type" => "artist",
+  "market" => "US"
+}
+
+# IO.inspect(headers)
+
+url = "#{base_url}search"
+
+request = Req.new(http_errors: :raise)
+json = Req.get!(request, url: url, headers: headers, params: parameters).body
+# |> IO.inspect(limit: :infinity)
+
+artist_id =
+  json
+  |> Map.fetch!("artists")
+  |> Map.fetch!("items")
+  |> Enum.at(0)
+  |> Map.fetch!("id")
+
+parameters = %{
+  "include_groups" => "album",
+  "market" => "US"
+}
+
+url = "#{base_url}artists/#{artist_id}/albums"
+
+request = Req.new(http_errors: :raise)
+json = Req.get!(request, url: url, headers: headers, params: parameters).body
+
+json
+|> Map.fetch!("items")
+# |> Enum.filter(fn album ->
+#   # No need to filter if we use `include_groups`
+#   album |> Map.fetch!("album_group") == "album"
+# end)
+|> Enum.map(fn album ->
+  album
+  |> IO.inspect(label: "Album")
+
+  %{
+    "date" => album["release_date"],
+    "title" => album["name"],
+    "total_tracks" => album["total_tracks"],
+    "type" => album["type"],
+    "images" => album["images"],
+    "id" => album["id"],
+    "href" => album["href"],
+    "external_urls" => album["external_urls"],
+    "uri" => album["uri"]
+  }
+end)
+|> Enum.count()
+```
