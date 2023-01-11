@@ -18,6 +18,7 @@ defmodule Beetseek.CLIFormatter do
       slowest: opts[:slowest],
       test_counter: %{},
       test_timings: [],
+      passed_counter: 0,
       failure_counter: 0,
       skipped_counter: 0,
       excluded_counter: 0,
@@ -61,7 +62,8 @@ defmodule Beetseek.CLIFormatter do
       IO.write(success(".", config))
     end
 
-    config = %{config | test_counter: update_test_counter(config.test_counter, test)}
+    test_counter = update_test_counter(config.test_counter, test)
+    config = %{config | test_counter: test_counter, passed_counter: config.passed_counter + 1}
     {:noreply, update_test_timings(config, test)}
   end
 
@@ -282,7 +284,7 @@ defmodule Beetseek.CLIFormatter do
     failure_pl = pluralize(config.failure_counter, "failure", "failures")
 
     message =
-      "#{formatted_test_type_counts}#{config.failure_counter} #{failure_pl}"
+      "#{formatted_test_type_counts}#{config.passed_counter} passed, #{config.failure_counter} #{failure_pl}"
       |> if_true(
         config.excluded_counter > 0,
         &(&1 <> ", #{config.excluded_counter} excluded")
