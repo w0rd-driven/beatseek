@@ -251,7 +251,8 @@ defmodule LiveBeats.MP3Stat do
             artist: nil,
             year: 1901,
             genre: nil,
-            tags: nil
+            tags: nil,
+            picture: nil
 
   @declared_frame_ids ~w(AENC APIC ASPI COMM COMR ENCR EQU2 ETCO GEOB GRID LINK MCDI MLLT OWNE PRIV PCNT POPM POSS RBUF RVA2 RVRB SEEK SIGN SYLT SYTC TALB TBPM TCOM TCON TCOP TDEN TDLY TDOR TDRC TDRL TDTG TENC TEXT TFLT TIPL TIT1 TIT2 TIT3 TKEY TLAN TLEN TMCL TMED TMOO TOAL TOFN TOLY TOPE TOWN TPE1 TPE2 TPE3 TPE4 TPOS TPRO TPUB TRCK TRSN TRSO TSOA TSOP TSOT TSRC TSSE TSST TXXX UFID USER USLT WCOM WCOP WOAF WOAR WOAS WORS WPAY WPUB WXXX)
 
@@ -283,10 +284,12 @@ defmodule LiveBeats.MP3Stat do
 
     case duration do
       duration when is_float(duration) and duration > 0 ->
+        IO.inspect(tag_info)
+        picture = tag_info["APIC"]
         title = Enum.at(tag_info["TIT2"] || [], 0)
         album = Enum.at(tag_info["TALB"] || [], 0)
         artist = Enum.at(tag_info["TPE1"] || [], 0)
-        year = Enum.at(tag_info["TDRC"] || [], 0)
+        year = Enum.at(tag_info["TDRC"] || [], 0) || Enum.at(tag_info["TYER"] || [], 0)
         genre = Enum.at(tag_info["TCON"] || [], 0)
         seconds = round(duration)
 
@@ -300,7 +303,8 @@ defmodule LiveBeats.MP3Stat do
            album: album,
            artist: artist,
            year: year,
-           genre: genre
+           genre: genre,
+           picture: picture
          }}
 
       _other ->
@@ -647,11 +651,13 @@ defmodule LiveBeats.MP3Stat do
   defp lookup_slot_size(l) when l in [:layer2, :layer3], do: 1
 end
 
-# file_name = "/Users/jbrayton/Music/iTunes/iTunes Media/Music/Periphery/Juggernaut_ Alpha/1-01 A Black Minute.mp3"
+# file_name =
+#   "/Users/jbrayton/Music/iTunes/iTunes Media/Music/Periphery/Juggernaut_ Alpha/1-01 A Black Minute.mp3"
 
 # LiveBeats.MP3Stat.parse(file_name)
 
 directory = "/Users/jbrayton/Music/iTunes/iTunes Media/Music"
+directory = "/Users/jbrayton/Music/iTunes/iTunes Media/Music/Periphery"
 files = "/**/**/*.mp3"
 
 path = Path.join(directory, files)

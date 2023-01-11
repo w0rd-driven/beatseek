@@ -16,7 +16,8 @@ defmodule Beatseek.MP3Stat do
             artist: nil,
             year: 1901,
             genre: nil,
-            tags: nil
+            tags: nil,
+            picture: nil
 
   @declared_frame_ids ~w(AENC APIC ASPI COMM COMR ENCR EQU2 ETCO GEOB GRID LINK MCDI MLLT OWNE PRIV PCNT POPM POSS RBUF RVA2 RVRB SEEK SIGN SYLT SYTC TALB TBPM TCOM TCON TCOP TDEN TDLY TDOR TDRC TDRL TDTG TENC TEXT TFLT TIPL TIT1 TIT2 TIT3 TKEY TLAN TLEN TMCL TMED TMOO TOAL TOFN TOLY TOPE TOWN TPE1 TPE2 TPE3 TPE4 TPOS TPRO TPUB TRCK TRSN TRSO TSOA TSOP TSOT TSRC TSSE TSST TXXX UFID USER USLT WCOM WCOP WOAF WOAR WOAS WORS WPAY WPUB WXXX)
 
@@ -51,8 +52,9 @@ defmodule Beatseek.MP3Stat do
         title = Enum.at(tag_info["TIT2"] || [], 0)
         album = Enum.at(tag_info["TALB"] || [], 0)
         artist = Enum.at(tag_info["TPE1"] || [], 0)
-        year = Enum.at(tag_info["TDRC"] || [], 0)
+        year = Enum.at(tag_info["TDRC"] || [], 0) || Enum.at(tag_info["TYER"] || [], 0)
         genre = Enum.at(tag_info["TCON"] || [], 0)
+        picture = tag_info["APIC"]
         seconds = round(duration)
 
         {:ok,
@@ -82,8 +84,9 @@ defmodule Beatseek.MP3Stat do
     title = Enum.at(tag_info["TIT2"] || [], 0)
     album = Enum.at(tag_info["TALB"] || [], 0)
     artist = Enum.at(tag_info["TPE1"] || [], 0)
-    year = Enum.at(tag_info["TDRC"] || [], 0)
+    year = Enum.at(tag_info["TDRC"] || [], 0) || Enum.at(tag_info["TYER"] || [], 0)
     genre = Enum.at(tag_info["TCON"] || [], 0)
+    picture = tag_info["APIC"]
 
     {:ok,
      %MP3Stat{
