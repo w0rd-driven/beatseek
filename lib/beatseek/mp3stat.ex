@@ -97,7 +97,6 @@ defmodule Beatseek.MP3Stat do
        year: year,
        genre: genre
      }}
-
   rescue
     _ -> {:error, :bad_file}
   end

@@ -32,3 +32,6 @@ beatseek-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Custom
+.elixir_ls/
+.vscode/

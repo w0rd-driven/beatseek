@@ -1,5 +1,4 @@
 defmodule Beatseek.FileSearch do
-
   def search() do
     # file_name = "/Users/jbrayton/Music/iTunes/iTunes Media/Music/Periphery/Juggernaut_ Alpha/1-01 A Black Minute.mp3"
 
@@ -53,6 +52,7 @@ defmodule Beatseek.FileSearch do
       # Now we filter by parent directory, from 4823 to 443
       file_path
       |> Path.dirname()
+
       # |> IO.inspect(label: "Basename")
     end)
     |> Enum.map(fn path ->
@@ -89,6 +89,7 @@ defmodule Beatseek.FileSearch do
       # Now we filter by parent directory, from 4823 to 443
       file_path
       |> Path.dirname()
+
       # |> IO.inspect(label: "Basename")
     end)
     |> Enum.map(fn path ->
@@ -115,6 +116,5 @@ defmodule Beatseek.FileSearch do
   end
 
   def benchmark() do
-    
   end
 end
