@@ -39,7 +39,6 @@ defmodule BeatseekWeb do
   def controller do
     quote do
       use Phoenix.Controller,
-        namespace: BeatseekWeb,
         formats: [:html, :json],
         layouts: [html: BeatseekWeb.Layouts]
 

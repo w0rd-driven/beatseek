@@ -17,7 +17,7 @@ config :beatseek, Beatseek.Repo,
 # you can enable the server option below.
 config :beatseek, BeatseekWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
-  secret_key_base: "v4psxwIvjN9SgetZu2b2TRfRetMJNlNCfhNVwbCTpqjWLNC6dxLroclk10DhoKso",
+  secret_key_base: "jgef9rU7H0BuHoMcoNTJTALmoeHXOvFQ58hC2XW3LDC8RH4iCetqhnrvte5oqsxA",
   server: false
 
 # In test we don't send emails.

@@ -18,7 +18,7 @@ config :beatseek, BeatseekWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Beatseek.PubSub,
-  live_view: [signing_salt: "R+7ZtinL"]
+  live_view: [signing_salt: "7uA8xa8n"]
 
 # Configures the mailer
 #
@@ -41,7 +41,7 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "3.1.8",
+  version: "3.2.4",
   default: [
     args: ~w(
       --config=tailwind.config.js

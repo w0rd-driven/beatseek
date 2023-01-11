@@ -23,7 +23,7 @@ config :beatseek, BeatseekWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "lXDBnn7ZFSa57icG6kF//GEPSXnKkgNwCl0N9eio5TJbUKWr1BhnGXcGMiLFZP6d",
+  secret_key_base: "4gZmTb9CtmDHIKnkN6YhujCZt5AdS4fK8AB3urjb11DaGh6FJZQVZ9kFyuGD8T2w",
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
@@ -58,8 +58,7 @@ config :beatseek, BeatseekWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/beatseek_web/(live|views)/.*(ex)$",
-      ~r"lib/beatseek_web/templates/.*(eex)$"
+      ~r"lib/beatseek_web/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 

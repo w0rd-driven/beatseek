@@ -7,7 +7,7 @@ defmodule BeatseekWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_beatseek_key",
-    signing_salt: "3xwjJPYP",
+    signing_salt: "2gop7Iu8",
     same_site: "Lax"
   ]
 
