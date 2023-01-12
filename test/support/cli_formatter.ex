@@ -1,4 +1,4 @@
-defmodule Beetseek.CLIFormatter do
+defmodule Beatseek.CLIFormatter do
   @moduledoc false
   use GenServer
 
