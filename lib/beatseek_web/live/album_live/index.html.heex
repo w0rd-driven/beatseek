@@ -1,0 +1,45 @@
+<.header>
+  Listing Albums
+  <:actions>
+    <.link patch={~p"/albums/new"}>
+      <.button>New Album</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="albums" rows={@albums} row_click={&JS.navigate(~p"/albums/#{&1}")}>
+  <:col :let={album} label="Name"><%= album.name %></:col>
+  <:col :let={album} label="Genre"><%= album.genre %></:col>
+  <:col :let={album} label="Year"><%= album.year %></:col>
+  <:col :let={album} label="Release date"><%= album.release_date %></:col>
+  <:col :let={album} label="Is owned"><%= album.is_owned %></:col>
+  <:col :let={album} label="Path"><%= album.path %></:col>
+  <:col :let={album} label="Image url"><%= album.image_url %></:col>
+  <:action :let={album}>
+    <div class="sr-only">
+      <.link navigate={~p"/albums/#{album}"}>Show</.link>
+    </div>
+    <.link patch={~p"/albums/#{album}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={album}>
+    <.link phx-click={JS.push("delete", value: %{id: album.id})} data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="album-modal"
+  show
+  on_cancel={JS.navigate(~p"/albums")}
+>
+  <.live_component
+    module={BeatseekWeb.AlbumLive.FormComponent}
+    id={@album.id || :new}
+    title={@page_title}
+    action={@live_action}
+    album={@album}
+    navigate={~p"/albums"}
+  />
+</.modal>
