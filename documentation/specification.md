@@ -98,7 +98,7 @@ Potential action types
       1. Path to the ID3 tag's base directory.
    6. `image_url:string`
       1. Extracted from ID3 or Spotify.
-   7. `mix phx.gen.live Albums Album albums name:string genre:string year:string release_date:date is_owned:boolean path:string image_url:string`
+   7. `mix phx.gen.live Albums Album albums name:string genre:string year:string release_date:date is_owned:boolean path:string image_url:string artist_id:references:artists`
 4. Settings - Next
 5. Notifications
    1. `title:string`
