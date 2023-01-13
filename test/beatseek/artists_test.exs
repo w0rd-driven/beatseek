@@ -35,7 +35,12 @@ defmodule Beatseek.ArtistsTest do
 
     test "update_artist/2 with valid data updates the artist" do
       artist = artist_fixture()
-      update_attrs = %{image_url: "some updated image_url", name: "some updated name", path: "some updated path"}
+
+      update_attrs = %{
+        image_url: "some updated image_url",
+        name: "some updated name",
+        path: "some updated path"
+      }
 
       assert {:ok, %Artist{} = artist} = Artists.update_artist(artist, update_attrs)
       assert artist.image_url == "some updated image_url"
