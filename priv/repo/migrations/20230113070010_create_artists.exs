@@ -9,5 +9,7 @@ defmodule Beatseek.Repo.Migrations.CreateArtists do
 
       timestamps()
     end
+
+    create unique_index(:artists, [:name, :path])
   end
 end

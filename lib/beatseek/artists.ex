@@ -52,7 +52,7 @@ defmodule Beatseek.Artists do
   def create_artist(attrs \\ %{}) do
     %Artist{}
     |> Artist.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(on_conflict: :nothing)
   end
 
   @doc """
