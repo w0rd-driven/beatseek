@@ -1,4 +1,4 @@
-defmodule Beatseek.FileSearch do
+defmodule Beatseek.Scanner do
   def search() do
     # file_name = "/Users/jbrayton/Music/iTunes/iTunes Media/Music/Periphery/Juggernaut_ Alpha/1-01 A Black Minute.mp3"
 
