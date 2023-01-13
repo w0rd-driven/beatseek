@@ -52,7 +52,25 @@ defmodule Beatseek.Artists do
   def create_artist(attrs \\ %{}) do
     %Artist{}
     |> Artist.changeset(attrs)
-    |> Repo.insert(on_conflict: :nothing)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Creates a artist.
+
+  ## Examples
+
+      iex> create_artist(%{field: value})
+      {:ok, %Artist{}}
+
+      iex> create_artist(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def upsert_artist(attrs \\ %{}) do
+    %Artist{}
+    |> Artist.changeset(attrs)
+    |> Repo.insert(on_conflict: {:replace_all_except, [:id]}, conflict_target: [:name, :path])
   end
 
   @doc """
