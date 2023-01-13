@@ -13,3 +13,9 @@ The Livebooks started as prototype covering multiple days of only a couple of ho
 * 15 min - Ran `mix phx.new` and overwrote the generated files. This was the quickest framework upgrade I've ever done but nothing was generated.
 * 30 min - Updated ID3 Livebook with capturing the other TYER frame as well as the picture. I'm not quite sure what I'll do with the picture as I believe the binary is stored here. I likely don't want that in the database.
 
+### January 12
+
+ - 2:45 am
+
+* 30 min - Research and generated authentication screens. Investigated changes and workflows to get an understanding of what gets added.
+* 15 min - Diary and time tracking.
