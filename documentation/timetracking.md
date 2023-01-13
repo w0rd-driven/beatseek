@@ -15,7 +15,21 @@ The Livebooks started as prototype covering multiple days of only a couple of ho
 
 ### January 12
 
- - 2:45 am
+2:00 am - 2:45 am
 
 * 30 min - Research and generated authentication screens. Investigated changes and workflows to get an understanding of what gets added.
 * 15 min - Diary and time tracking.
+
+?
+
+* 1 hour? - Specification started to Data Layer. This started during the day sometime though I did go to bed at 4 am yesterday
+* 30 min - Further Spotify prototyping to verify data layer
+
+### January 13
+
+11:15 am - 1:45 am?
+
+* 1 min - Research Tailwind UI sidebar components and Figma
+* 1.5 hour - Specification v0.1 completed
+
+I haven't done a timesheet in so damn long I've already had problems keeping track. These hours could be wildly over or under though I for sure didn't spend 8 hours so far. I played Axiom Verge 2 instead of worked on this after class so I know I didn't do much then.
