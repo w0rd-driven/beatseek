@@ -188,10 +188,10 @@ headers = [
 ]
 
 parameters = %{
-  # "s" => "Periphery"
-  # "s" => "Tool"
-  # "s" => "Kendrick Lamar"
-  "q" => "Atreyu",
+  "q" => "Periphery",
+  # "q" => "Tool"
+  # "q" => "Kendrick Lamar"
+  # "q" => "Atreyu",
   "type" => "release"
 }
 
@@ -251,14 +251,15 @@ headers = [
   # {"user-agent", ""},
   {"content-type", "application/json"},
   {"accept", "application/json"},
-  {"Authorization", "Bearer #{System.get_env("LB_SPOTIFY_TOKEN")}"}
+  {"Authorization",
+   "Bearer BQCJkOaWTtNbvrv9S7g9xZrbk88ATDfK6I-Ez8xLrZPhzfW32fFu4QYJqva1XAQ--XgFF8pjm69jSypiTSZt_2Glw8To_LUNj1r_pG7RsAFn14IIrg0e3va92UgFGQFwK8Gmc0TQlBzY0gWPtKMb_QBH8buIRnnNz7w12DMIJaEC"}
 ]
 
 parameters = %{
-  # "q" => "Periphery",
+  "q" => "Periphery",
   # "q" => "Tool",
   # "q" => "Kendrick Lamar",
-  "q" => "Atreyu",
+  # "q" => "Atreyu",
   "type" => "artist",
   "market" => "US"
 }
@@ -268,8 +269,10 @@ parameters = %{
 url = "#{base_url}search"
 
 request = Req.new(http_errors: :raise)
-json = Req.get!(request, url: url, headers: headers, params: parameters).body
-# |> IO.inspect(limit: :infinity)
+
+json =
+  Req.get!(request, url: url, headers: headers, params: parameters).body
+  |> IO.inspect(limit: :infinity)
 
 artist_id =
   json
