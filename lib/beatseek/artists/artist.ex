@@ -14,6 +14,6 @@ defmodule Beatseek.Artists.Artist do
   def changeset(artist, attrs) do
     artist
     |> cast(attrs, [:name, :path, :image_url])
-    |> validate_required([:name, :path, :image_url])
+    |> validate_required([:name, :image_url])
   end
 end
