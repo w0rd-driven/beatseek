@@ -1,9 +1,17 @@
 defmodule Beatseek.Transformers.ArtistTransformer do
   def transform(id3) do
     %{
-      name: id3.artist,
+      name: get_artist(id3.artist),
       path: get_path(id3.path, id3.artist)
     }
+  end
+
+  defp get_artist(artist) do
+    # See https://elixirforum.com/t/string-capitalize-should-have-a-leave-the-rest-of-the-word-alone-option/31095
+    artist
+    |> String.split(~r{\s}, trim: true)
+    |> Enum.map(&String.capitalize/1)
+    |> Enum.join(" ")
   end
 
   defp get_path(path, artist) do
@@ -11,7 +19,7 @@ defmodule Beatseek.Transformers.ArtistTransformer do
     artist_directory = album_directory |> Path.dirname()
     directory_name = artist_directory |> Path.basename()
 
-    if String.jaro_distance(artist, directory_name) >= 0.8 do
+    if String.jaro_distance(artist, directory_name) >= 0.75 do
       artist_directory
     else
       album_directory

@@ -57,6 +57,6 @@ defmodule Beatseek.Scanner do
 
   defp create_records(id3) do
     artist = ArtistTransformer.transform(id3)
-    Artists.create_artist(artist)
+    Artists.upsert_artist(artist)
   end
 end
