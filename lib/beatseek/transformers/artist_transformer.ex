@@ -11,7 +11,7 @@ defmodule Beatseek.Transformers.ArtistTransformer do
     artist_directory = album_directory |> Path.dirname()
     directory_name = artist_directory |> Path.basename()
 
-    if String.jaro_distance(artist, directory_name) >= 0.5 do
+    if String.jaro_distance(artist, directory_name) >= 0.8 do
       artist_directory
     else
       album_directory
