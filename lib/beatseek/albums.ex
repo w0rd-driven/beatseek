@@ -18,7 +18,9 @@ defmodule Beatseek.Albums do
 
   """
   def list_albums do
-    Repo.all(Album)
+    Album
+    |> Repo.all()
+    |> Repo.preload(:artist)
   end
 
   @doc """
@@ -35,7 +37,7 @@ defmodule Beatseek.Albums do
       ** (Ecto.NoResultsError)
 
   """
-  def get_album!(id), do: Repo.get!(Album, id)
+  def get_album!(id), do: Repo.get!(Album, id) |> Repo.preload(:artist)
 
   @doc """
   Creates a album.

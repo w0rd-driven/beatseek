@@ -6,7 +6,7 @@ defmodule BeatseekWeb.ArtistLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :artists, list_artists())}
+    {:ok, socket |> assign(:artists, list_artists()) |> assign(:active_tab, :artists)}
   end
 
   @impl true

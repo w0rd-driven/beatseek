@@ -18,7 +18,9 @@ defmodule Beatseek.Artists do
 
   """
   def list_artists do
-    Repo.all(Artist)
+    Artist
+    |> order_by(asc: :name)
+    |> Repo.all()
   end
 
   @doc """
@@ -70,7 +72,7 @@ defmodule Beatseek.Artists do
   def upsert_artist(attrs \\ %{}) do
     %Artist{}
     |> Artist.changeset(attrs)
-    |> Repo.insert(on_conflict: {:replace_all_except, [:id]}, conflict_target: [:name, :path])
+    |> Repo.insert(on_conflict: {:replace_all_except, [:id]}, conflict_target: [:name])
   end
 
   @doc """

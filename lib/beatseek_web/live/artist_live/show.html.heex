@@ -1,32 +1,7 @@
-<.header>
-  Artist <%= @artist.id %>
-  <:subtitle>This is a artist record from your database.</:subtitle>
-  <:actions>
-    <.link patch={~p"/artists/#{@artist}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit artist</.button>
-    </.link>
-  </:actions>
-</.header>
-
-<.list>
-  <:item title="Name"><%= @artist.name %></:item>
-  <:item title="Image"><%= @artist.image_url %></:item>
-</.list>
-
-<.back navigate={~p"/artists"}>Back to artists</.back>
-
-<.modal
-  :if={@live_action == :edit}
-  id="artist-modal"
-  show
-  on_cancel={JS.patch(~p"/artists/#{@artist}")}
->
-  <.live_component
-    module={BeatseekWeb.ArtistLive.FormComponent}
-    id={@artist.id}
-    title={@page_title}
-    action={@live_action}
-    artist={@artist}
-    navigate={~p"/artists/#{@artist}"}
-  />
-</.modal>
+<div class="flex-row">
+  <.back navigate={~p"/artists"}></.back>
+  <.header>
+    <%= @artist.name %>
+    <:subtitle>This is a artist record from your database.</:subtitle>
+  </.header>
+</div>
