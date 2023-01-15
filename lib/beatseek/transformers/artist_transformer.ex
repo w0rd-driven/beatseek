@@ -1,12 +1,12 @@
 defmodule Beatseek.Transformers.ArtistTransformer do
   def transform(id3) do
     %{
-      name: get_artist(id3.artist),
+      name: get_name(id3.artist),
       path: get_path(id3.path, id3.artist)
     }
   end
 
-  defp get_artist(artist) do
+  defp get_name(artist) do
     # See https://elixirforum.com/t/string-capitalize-should-have-a-leave-the-rest-of-the-word-alone-option/31095
     artist
     |> String.split(~r{\s}, trim: true)

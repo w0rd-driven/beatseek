@@ -20,7 +20,12 @@
 
 <.back navigate={~p"/albums"}>Back to albums</.back>
 
-<.modal :if={@live_action == :edit} id="album-modal" show on_cancel={JS.patch(~p"/albums/#{@album}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="album-modal"
+  show
+  on_cancel={JS.patch(~p"/albums/#{@album}")}
+>
   <.live_component
     module={BeatseekWeb.AlbumLive.FormComponent}
     id={@album.id}

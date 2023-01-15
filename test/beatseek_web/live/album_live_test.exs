@@ -4,9 +4,33 @@ defmodule BeatseekWeb.AlbumLiveTest do
   import Phoenix.LiveViewTest
   import Beatseek.AlbumsFixtures
 
-  @create_attrs %{genre: "some genre", image_url: "some image_url", is_owned: true, name: "some name", path: "some path", release_date: "2023-1-12", year: "some year"}
-  @update_attrs %{genre: "some updated genre", image_url: "some updated image_url", is_owned: false, name: "some updated name", path: "some updated path", release_date: "2023-1-13", year: "some updated year"}
-  @invalid_attrs %{genre: nil, image_url: nil, is_owned: false, name: nil, path: nil, release_date: nil, year: nil}
+  @create_attrs %{
+    genre: "some genre",
+    image_url: "some image_url",
+    is_owned: true,
+    name: "some name",
+    path: "some path",
+    release_date: "2023-1-12",
+    year: "some year"
+  }
+  @update_attrs %{
+    genre: "some updated genre",
+    image_url: "some updated image_url",
+    is_owned: false,
+    name: "some updated name",
+    path: "some updated path",
+    release_date: "2023-1-13",
+    year: "some updated year"
+  }
+  @invalid_attrs %{
+    genre: nil,
+    image_url: nil,
+    is_owned: false,
+    name: nil,
+    path: nil,
+    release_date: nil,
+    year: nil
+  }
 
   defp create_album(_) do
     album = album_fixture()

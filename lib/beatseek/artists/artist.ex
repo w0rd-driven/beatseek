@@ -6,6 +6,7 @@ defmodule Beatseek.Artists.Artist do
     field :image_url, :string
     field :name, :string
     field :path, :string
+    has_many :albums, Beatseek.Albums.Album
 
     timestamps()
   end

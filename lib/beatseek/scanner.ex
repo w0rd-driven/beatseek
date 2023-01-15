@@ -1,6 +1,8 @@
 defmodule Beatseek.Scanner do
   alias Beatseek.Artists
+  alias Beatseek.Albums
   alias Beatseek.Transformers.ArtistTransformer
+  alias Beatseek.Transformers.AlbumTransformer
 
   def full_scan(directory \\ "/Users/jbrayton/Music/iTunes/iTunes Media/Music") do
     files = "/**/*.mp3"
@@ -55,8 +57,13 @@ defmodule Beatseek.Scanner do
     |> Enum.map(&create_records/1)
   end
 
-  defp create_records(id3) do
-    artist = ArtistTransformer.transform(id3)
-    Artists.upsert_artist(artist)
+  def create_records(id3) do
+    artist_params = ArtistTransformer.transform(id3)
+    album_params = AlbumTransformer.transform(id3)
+
+    with {:ok, artist} <- Artists.upsert_artist(artist_params),
+         {:ok, album} <- Albums.upsert_album(album_params, artist) do
+      %{id3: id3, artist: artist, album: album}
+    end
   end
 end
