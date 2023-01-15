@@ -1,37 +1,21 @@
-<.header>
-  Album <%= @album.id %>
-  <:subtitle>This is a album record from your database.</:subtitle>
-  <:actions>
-    <.link patch={~p"/albums/#{@album}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit album</.button>
-    </.link>
-  </:actions>
-</.header>
-
-<.list>
-  <:item title="Name"><%= @album.name %></:item>
-  <:item title="Genre"><%= @album.genre %></:item>
-  <:item title="Year"><%= @album.year %></:item>
-  <:item title="Release date"><%= @album.release_date %></:item>
-  <:item title="Is owned"><%= @album.is_owned %></:item>
-  <:item title="Path"><%= @album.path %></:item>
-  <:item title="Image url"><%= @album.image_url %></:item>
-</.list>
-
-<.back navigate={~p"/albums"}>Back to albums</.back>
-
-<.modal
-  :if={@live_action == :edit}
-  id="album-modal"
-  show
-  on_cancel={JS.patch(~p"/albums/#{@album}")}
->
-  <.live_component
-    module={BeatseekWeb.AlbumLive.FormComponent}
-    id={@album.id}
-    title={@page_title}
-    action={@live_action}
-    album={@album}
-    navigate={~p"/albums/#{@album}"}
-  />
-</.modal>
+<div class="flex-row">
+  <.back navigate={~p"/albums"}></.back>
+  <div class="flex pt-14 pl-10">
+    <img
+      src={if is_nil(@album.image_url), do: "/images/album.svg", else: @album.image_url}
+      class="flex-col h-48 w-48"
+    />
+    <div class="pl-12 flex-row text-2xl">
+      <div class="text-black font-bold"><%= @album.name %></div>
+      <.link
+        navigate={~p"/artists/#{@album.artist.id}"}
+        class="group h-12 rounded-lg text-primary-600 hover:underline font-bold"
+      >
+        <%= @album.artist.name %>
+      </.link>
+      <div class="flex flex-col text-gray-500 text-sm uppercase font-medium">
+        <%= @album.genre %> &bull; <%= @album.year %>
+      </div>
+    </div>
+  </div>
+</div>

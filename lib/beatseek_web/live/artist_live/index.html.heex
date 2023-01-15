@@ -1,40 +1,8 @@
-<.header>
-  Listing Artists
-  <:actions>
-    <.link patch={~p"/artists/new"}>
-      <.button>New Artist</.button>
-    </.link>
-  </:actions>
-</.header>
-
 <.table id="artists" rows={@artists} row_click={&JS.navigate(~p"/artists/#{&1}")}>
-  <:col :let={artist} label="Name"><%= artist.name %></:col>
-  <:col :let={artist} label="Image"><%= artist.image_url %></:col>
-  <:action :let={artist}>
-    <div class="sr-only">
-      <.link navigate={~p"/artists/#{artist}"}>Show</.link>
-    </div>
-    <.link patch={~p"/artists/#{artist}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={artist}>
-    <.link phx-click={JS.push("delete", value: %{id: artist.id})} data-confirm="Are you sure?">
-      Delete
-    </.link>
-  </:action>
+  <:col :let={_artist}>
+    <span class="flex items-center justify-center font-bold bg-primary-200 text-gray-100 h-8 w-8 rounded-full ml-auto">
+      <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
+    </span>
+  </:col>
+  <:col :let={artist}><%= artist.name %></:col>
 </.table>
-
-<.modal
-  :if={@live_action in [:new, :edit]}
-  id="artist-modal"
-  show
-  on_cancel={JS.navigate(~p"/artists")}
->
-  <.live_component
-    module={BeatseekWeb.ArtistLive.FormComponent}
-    id={@artist.id || :new}
-    title={@page_title}
-    action={@live_action}
-    artist={@artist}
-    navigate={~p"/artists"}
-  />
-</.modal>
