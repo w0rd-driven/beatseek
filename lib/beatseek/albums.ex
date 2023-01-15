@@ -56,6 +56,28 @@ defmodule Beatseek.Albums do
   end
 
   @doc """
+  Creates a artist.
+
+  ## Examples
+
+      iex> create_artist(%{field: value})
+      {:ok, %Artist{}}
+
+      iex> create_artist(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def upsert_album(attrs \\ %{}, artist \\ nil) do
+    %Album{}
+    |> Album.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:artist, artist)
+    |> Repo.insert(
+      on_conflict: {:replace_all_except, [:id]},
+      conflict_target: [:artist_id, :name]
+    )
+  end
+
+  @doc """
   Updates a album.
 
   ## Examples

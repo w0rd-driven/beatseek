@@ -10,7 +10,7 @@ defmodule Beatseek.Albums.Album do
     field :path, :string
     field :release_date, :date
     field :year, :string
-    field :artist_id, :id
+    belongs_to :artist, Beatseek.Artists.Artist
 
     timestamps()
   end
@@ -18,7 +18,7 @@ defmodule Beatseek.Albums.Album do
   @doc false
   def changeset(album, attrs) do
     album
-    |> cast(attrs, [:name, :genre, :year, :release_date, :is_owned, :path, :image_url])
-    |> validate_required([:name, :genre, :year, :release_date, :is_owned, :path, :image_url])
+    |> cast(attrs, [:name, :genre, :year, :release_date, :is_owned, :path, :image_url, :artist_id])
+    |> validate_required([:name, :is_owned, :path])
   end
 end
