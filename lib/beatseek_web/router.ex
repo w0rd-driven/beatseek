@@ -20,7 +20,7 @@ defmodule BeatseekWeb.Router do
   scope "/", BeatseekWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", PageController, :music
 
     live "/artists", ArtistLive.Index, :index
     live "/artists/new", ArtistLive.Index, :new
