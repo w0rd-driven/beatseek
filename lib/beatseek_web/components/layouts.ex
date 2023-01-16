@@ -1,6 +1,8 @@
 defmodule BeatseekWeb.Layouts do
   use BeatseekWeb, :html
 
+  alias BeatseekWeb.NotificationComponent
+
   embed_templates "layouts/*"
 
   attr :id, :string
@@ -8,8 +10,8 @@ defmodule BeatseekWeb.Layouts do
 
   def sidebar(assigns) do
     ~H"""
-    <div class="flex w-1/3 max-w-xs p-4">
-      <ul class="flex flex-col w-full">
+    <div class="w-1/3 max-w-xs p-4">
+      <ul class="flex flex-col w-full sticky top-0">
         <li class="my-px">
           <span class="flex font-bold text-md text-primary-900 px-4 mt-2 mb-4 uppercase">Music</span>
         </li>
@@ -45,15 +47,18 @@ defmodule BeatseekWeb.Layouts do
           <span class="flex font-bold text-md text-primary-900 px-4 my-4 uppercase">Account</span>
         </li>
         <li class="my-px">
-          <a
-            href="#"
-            class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
+          <.link
+            navigate={~p"/users/settings"}
+            class={
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100 #{if @active_tab == :settings, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+            }
+            aria-current={if @active_tab == :settings, do: "true", else: "false"}
           >
             <span class="flex items-center justify-center text-lg text-primary-400">
-              <Heroicons.user_circle solid class="h-6 w-6 stroke-current" />
+              <Heroicons.user solid class="h-6 w-6 stroke-current" />
             </span>
             <span class="ml-3 font-bold">Profile</span>
-          </a>
+          </.link>
         </li>
         <li class="my-px">
           <a
@@ -64,9 +69,7 @@ defmodule BeatseekWeb.Layouts do
               <Heroicons.bell_alert solid class="h-6 w-6 stroke-current" />
             </span>
             <span class="ml-3 font-bold">Notifications</span>
-            <span class="flex items-center justify-center text-sm text-red-400 font-bold bg-primary-200 h-6 px-2 rounded-full ml-auto">
-              10
-            </span>
+            <.live_component module={NotificationComponent} id="notification" />
           </a>
         </li>
         <li class="my-px">
@@ -81,15 +84,16 @@ defmodule BeatseekWeb.Layouts do
           </a>
         </li>
         <li class="my-px">
-          <a
-            href="#"
-            class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
+          <.link
+            navigate={~p"/users/log_out"}
+            method="delete"
+            class="group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
           >
             <span class="flex items-center justify-center text-lg text-red-400">
               <Heroicons.lock_open solid class="h-6 w-6 stroke-current" />
             </span>
             <span class="ml-3 font-bold">Logout</span>
-          </a>
+          </.link>
         </li>
       </ul>
     </div>
@@ -97,10 +101,10 @@ defmodule BeatseekWeb.Layouts do
   end
 
   def footer_copyright(assigns) do
-    this_year = DateTime.now("Etc/UTC")
+    this_year = Date.utc_today().year
 
     ~H"""
-
+    <span>© <%= this_year %> Jeremy Brayton</span>
     """
   end
 end

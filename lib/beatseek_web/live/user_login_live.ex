@@ -44,6 +44,6 @@ defmodule BeatseekWeb.UserLoginLive do
 
   def mount(_params, _session, socket) do
     email = live_flash(socket.assigns.flash, :email)
-    {:ok, assign(socket, email: email), temporary_assigns: [email: nil]}
+    {:ok, assign(socket, email: email), temporary_assigns: [active_tab: nil, email: nil]}
   end
 end
