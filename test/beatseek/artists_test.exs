@@ -8,7 +8,7 @@ defmodule Beatseek.ArtistsTest do
 
     import Beatseek.ArtistsFixtures
 
-    @invalid_attrs %{image_url: nil, name: nil, path: nil}
+    @invalid_attrs %{checked_at: nil, image_url: nil, name: nil, path: nil}
 
     test "list_artists/0 returns all artists" do
       artist = artist_fixture()
@@ -21,9 +21,15 @@ defmodule Beatseek.ArtistsTest do
     end
 
     test "create_artist/1 with valid data creates a artist" do
-      valid_attrs = %{image_url: "some image_url", name: "some name", path: "some path"}
+      valid_attrs = %{
+        checked_at: ~U[2023-01-15 21:16:00.000000Z],
+        image_url: "some image_url",
+        name: "some name",
+        path: "some path"
+      }
 
       assert {:ok, %Artist{} = artist} = Artists.create_artist(valid_attrs)
+      assert artist.checked_at == ~U[2023-01-15 21:16:00.000000Z]
       assert artist.image_url == "some image_url"
       assert artist.name == "some name"
       assert artist.path == "some path"
@@ -37,12 +43,14 @@ defmodule Beatseek.ArtistsTest do
       artist = artist_fixture()
 
       update_attrs = %{
+        checked_at: ~U[2023-01-16 21:16:00.000000Z],
         image_url: "some updated image_url",
         name: "some updated name",
         path: "some updated path"
       }
 
       assert {:ok, %Artist{} = artist} = Artists.update_artist(artist, update_attrs)
+      assert artist.checked_at == ~U[2023-01-16 21:16:00.000000Z]
       assert artist.image_url == "some updated image_url"
       assert artist.name == "some updated name"
       assert artist.path == "some updated path"

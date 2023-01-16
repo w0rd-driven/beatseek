@@ -4,9 +4,19 @@ defmodule BeatseekWeb.ArtistLiveTest do
   import Phoenix.LiveViewTest
   import Beatseek.ArtistsFixtures
 
-  @create_attrs %{image_url: "some image_url", name: "some name"}
-  @update_attrs %{image_url: "some updated image_url", name: "some updated name"}
-  @invalid_attrs %{image_url: nil, name: nil}
+  @create_attrs %{
+    checked_at: "2023-01-15T21:16:00.000000Z",
+    image_url: "some image_url",
+    name: "some name",
+    path: "some path"
+  }
+  @update_attrs %{
+    checked_at: "2023-01-16T21:16:00.000000Z",
+    image_url: "some updated image_url",
+    name: "some updated name",
+    path: "some updated path"
+  }
+  @invalid_attrs %{checked_at: nil, image_url: nil, name: nil, path: nil}
 
   defp create_artist(_) do
     artist = artist_fixture()
