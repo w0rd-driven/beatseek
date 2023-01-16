@@ -21,7 +21,9 @@ defmodule BeatseekWeb.ArtistLive.FormComponent do
         phx-submit="save"
       >
         <.input field={{f, :name}} type="text" label="Name" />
+        <.input field={{f, :path}} type="text" label="Path" />
         <.input field={{f, :image_url}} type="text" label="Image url" />
+        <.input field={{f, :checked_at}} type="text" label="Checked at" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Artist</.button>
         </:actions>

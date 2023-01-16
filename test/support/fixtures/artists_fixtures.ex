@@ -11,6 +11,7 @@ defmodule Beatseek.ArtistsFixtures do
     {:ok, artist} =
       attrs
       |> Enum.into(%{
+        checked_at: ~U[2023-01-15 21:16:00.000000Z],
         image_url: "some image_url",
         name: "some name",
         path: "some path"
