@@ -84,7 +84,8 @@ Potential action types
       1. Calculated by ID3 tag parent parent directory, if the names match within a threshold.
    3. `image_url:string`
       1. Spotify
-   4. `mix phx.gen.live Artists Artist artists name:string path:string image_url:string`
+   4. `checked_at:utc_datetime_usec`
+   5. `mix phx.gen.live Artists Artist artists name:string path:string image_url:string checked_at:utc_datetime_usec`
 3. Album
    1. `name:string`
    2. `genre:string`
@@ -99,15 +100,25 @@ Potential action types
    6. `image_url:string`
       1. Extracted from ID3 or Spotify.
    7. `mix phx.gen.live Albums Album albums name:string genre:string year:string release_date:date is_owned:boolean path:string image_url:string artist_id:references:artists`
-4. Settings - Next
+4. Settings
+   1. `scanned_at:utc_datetime_usec`
+   2. `checked_at:utc_datetime_usec`
+   3. Next
+      1. `directories`: embedded JSON?
 5. Notifications
-   1. `title:string`
-   2. `content:text`
-   3. `type:string`
+   1. `album_id:integer`
+   2. `title:string`
+   3. `payload:text`
+   4. `type:enum` - See https://hexdocs.pm/ecto/Ecto.Enum.html
+   5. `seen_at:utc_datetime_usec`
+   6. `mix phx.gen.live Notifications Notification notifications title:string payload:text type:string seen_at:utc_datetime_usec album_id:references:albums`
 6. Actions - Next
-   1. `title:string`
-   2. `content:text`
-   3. `type:string`
+   1. `table_name:string`
+   2. `table_id:integer`
+   3. `title:string`
+   4. `payload:text`
+   5. `type:enum` - See https://hexdocs.pm/ecto/Ecto.Enum.html
+   6. `completed_at:utc_datetime_usec`
 
 ## User Interface
 
@@ -117,7 +128,7 @@ I see in my mind an application that takes the same sidebar as Livebeats as the 
 
 1. Dashboard? - Next/Later
 2. Search? - Next
-3. Library
+3. Music
    1. Artists with badge count(s)
    2. Albums with badge count(s)
 4. Account
@@ -139,21 +150,21 @@ I see in my mind an application that takes the same sidebar as Livebeats as the 
 1. Vertical scrolling list
    1. Filter?
    2. Sort by Name or Date?
-   3. Image, uses default
+   3. Image, uses default if no `image_url` found
    4. Name
 2. Albums side panel
    1. Name
    2. X Albums
    3. Dot Menu
       1. Check for new albums
-   4. Image
+   4. Image, uses default if no `image_url` found
    5. Name
    6. 1st Genre * Year
    7. Missing albums opacity
 
 ### Artists
 
-1. Grid of images
+1. Grid of images, uses default if no `image_url` found
    1. Name | Year
    2. Artist Name
    3. Missing albums opacity
@@ -197,7 +208,7 @@ Check should also be a named GenServer.
 
 1. start message
    1. Run on startup?
-   2. Set `is_checking` conditional to lock and prevent multiple full checks.
+   2. Set `is_checking` conditional to lock and prevent multiple full system checks.
    3. Run full check algorithm.
 2. check artist name message
    1. For each album returned, String.jaro_distance to try to match each name in the database.
