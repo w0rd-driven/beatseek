@@ -47,7 +47,7 @@ defmodule BeatseekWeb.UserRegistrationLive do
   def mount(_params, _session, socket) do
     changeset = Accounts.change_user_registration(%User{})
     socket = assign(socket, changeset: changeset, trigger_submit: false)
-    {:ok, socket, temporary_assigns: [changeset: nil]}
+    {:ok, socket, temporary_assigns: [active_tab: nil, changeset: nil]}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
