@@ -2,39 +2,39 @@
 
 What I believe to be left:
 
-1. Add `Settings` schema
-    1. This should've been next but we do need to keep and track when the scan was last run and the API check was last run per artist (for 1 offs) or per attempt.
-    2. `scanned_at`
-    3. `checked_at`
-2. Add `Notifications` schema.
-    1. `title`, `payload`, `type`, `read_at`.
-    2. Title: `#{API.name} was released on #{API.release_date}`.
-    3. Payload: `API.payload`. We do need to store this somewhere.
+1. Add `Notifications` schema.
+    1. `icon`, `subject`, `body`, `url`, `type`, `read_at`.
+    2. subject: `#{API.name} was released on #{API.release_date}`.
+    3. body: `API.payload`. We do need to store this somewhere.
     4. Types
         1. not_owned (better word?)
         2. new_release - Released within the last 6 months.
         3. upcoming - If APIs return future dates.
-3. Customize `Notifications` page.
-    1. Filter by type via dropdown, `select distinct(type)` to build the list of types.
-4. Wire up notification component via PubSub.
+2. Customize `Notifications` page.
+    1. Filter by type via dropdown, use Ecto.Enum documentation to build the list of types.
+3. Wire up notification component via PubSub.
     1. I want to increment the counter via publish on each API call vs checking the database each time.
+4. Implement the Spotify API logic.
+    1. This is a **big fucking piece and kind of why this whole thing was made. Why am I leaving it until damn near last?**.
 5. Add `badge count` component to Artist.
 6. Add `badge count` component to Albums.
     1. Owned only or Owned / Total
-7. Implement the Spotify API logic.
-    1. This is a **big fucking piece and kind of why this whole thing was made. Why am I leaving it until damn near last?**.
-8. Artist -> show
+7. Artist -> show
     1. This whole screen is incomplete as I should be showing a header and **all the child albums** with a sticky header.
     2. Create this as a master->detail screen.
-9. Add `is_owned` badge of a green checkmark or a red x when not owned to all album displays.
-10. Mobile sidebar shown or hidden using Tailwind breakpoints. See https://github.com/dbernheisel/bernheisel.com/blob/main/lib/bern_web/templates/layout/nav.html.heex. There's another example with Livebeats that does something similar.
-11. Next
-    1. Customize `Settings` page.
-    2. Profile looks out of place from the existing `phx.gen.auth` screens. I messed up the flexbox styling so it needs to be adjusted.
-    3. Logout oddly doesn't send a DELETE request even though I'm using exactly what I think I should be.
-    4. Login screen shows the sidebar.
+8. Add `is_owned` badge of a green checkmark or a red x when not owned to all album displays.
+9. Mobile sidebar shown or hidden using Tailwind breakpoints. See https://github.com/dbernheisel/bernheisel.com/blob/main/lib/bern_web/templates/layout/nav.html.heex. There's another example with Livebeats that does something similar.
+10. Next
+    1. Add `Settings` schema
+        1. This should've been next but we do need to keep and track when the scan was last run and the API check was last run per artist (for 1 offs) or per attempt.
+        2. `scanned_at`
+        3. `checked_at`
+    2. Customize `Settings` page.
+    3. Profile looks out of place from the existing `phx.gen.auth` screens. I messed up the flexbox styling so it needs to be adjusted.
+    4. Logout oddly doesn't send a DELETE request even though I'm using exactly what I think I should be.
+    5. Login screen shows the sidebar.
         1. It's possible I need to do something like `if :active_tab == :nil, hide()`.
-    5. Light and dark theme via https://github.com/dbernheisel/bernheisel.com/blob/main/assets/js/theme.js.
+    6. Light and dark theme via https://github.com/dbernheisel/bernheisel.com/blob/main/assets/js/theme.js.
 
 I "multitasked" again a little bit during class. I joined late at about 1:45 pm give or take and finally showed my face. I wanted to do more of that but kept forgetting.
 I wanted to track what I have left to do here but a better version of myself would have this on GitHub in at least a private repo so I could work against issues.
