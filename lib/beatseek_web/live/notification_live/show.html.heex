@@ -1,0 +1,36 @@
+<.header>
+  Notification <%= @notification.id %>
+  <:subtitle>This is a notification record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/notifications/#{@notification}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit notification</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Icon"><%= @notification.icon %></:item>
+  <:item title="Subject"><%= @notification.subject %></:item>
+  <:item title="Body"><%= @notification.body %></:item>
+  <:item title="Url"><%= @notification.url %></:item>
+  <:item title="Type"><%= @notification.type %></:item>
+  <:item title="Seen at"><%= @notification.seen_at %></:item>
+</.list>
+
+<.back navigate={~p"/notifications"}>Back to notifications</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="notification-modal"
+  show
+  on_cancel={JS.patch(~p"/notifications/#{@notification}")}
+>
+  <.live_component
+    module={BeatseekWeb.NotificationLive.FormComponent}
+    id={@notification.id}
+    title={@page_title}
+    action={@live_action}
+    notification={@notification}
+    navigate={~p"/notifications/#{@notification}"}
+  />
+</.modal>

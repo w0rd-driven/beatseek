@@ -35,6 +35,13 @@ defmodule BeatseekWeb.Router do
 
     live "/albums/:id", AlbumLive.Show, :show
     live "/albums/:id/show/edit", AlbumLive.Show, :edit
+
+    live "/notifications", NotificationLive.Index, :index
+    live "/notifications/new", NotificationLive.Index, :new
+    live "/notifications/:id/edit", NotificationLive.Index, :edit
+
+    live "/notifications/:id", NotificationLive.Show, :show
+    live "/notifications/:id/show/edit", NotificationLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

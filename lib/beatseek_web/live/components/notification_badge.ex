@@ -1,4 +1,4 @@
-defmodule BeatseekWeb.NotificationComponent do
+defmodule BeatseekWeb.Components.NotificationBadge do
   use BeatseekWeb, :live_component
 
   @impl true
