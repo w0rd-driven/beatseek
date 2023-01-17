@@ -10,7 +10,7 @@ defmodule BeatseekWeb.Layouts do
 
   def sidebar(assigns) do
     ~H"""
-    <div class="w-1/3 max-w-xs p-4">
+    <div :if={!is_nil(@active_tab)} class="w-1/3 max-w-xs p-4">
       <ul class="flex flex-col w-full sticky top-0">
         <li class="my-px">
           <span class="flex font-bold text-md text-primary-900 px-4 mt-2 mb-4 uppercase">Music</span>
@@ -85,7 +85,7 @@ defmodule BeatseekWeb.Layouts do
         </li>
         <li class="my-px">
           <.link
-            navigate={~p"/users/log_out"}
+            href={~p"/users/log_out"}
             method="delete"
             class="group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
           >
