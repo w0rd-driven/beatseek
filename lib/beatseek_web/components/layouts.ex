@@ -1,7 +1,7 @@
 defmodule BeatseekWeb.Layouts do
   use BeatseekWeb, :html
 
-  alias BeatseekWeb.NotificationComponent
+  alias BeatseekWeb.Components.NotificationBadge
 
   embed_templates "layouts/*"
 
@@ -69,7 +69,7 @@ defmodule BeatseekWeb.Layouts do
               <Heroicons.bell_alert solid class="h-6 w-6 stroke-current" />
             </span>
             <span class="ml-3 font-bold">Notifications</span>
-            <.live_component module={NotificationComponent} id="notification" />
+            <.live_component module={NotificationBadge} id="notificationBadge" />
           </a>
         </li>
         <li class="my-px">
