@@ -6,6 +6,7 @@ defmodule Beatseek.Albums do
   import Ecto.Query, warn: false
   alias Beatseek.Repo
 
+  alias Beatseek.Artists.Artist
   alias Beatseek.Albums.Album
 
   @doc """
@@ -21,6 +22,21 @@ defmodule Beatseek.Albums do
     Album
     |> Repo.all()
     |> Repo.preload(:artist)
+  end
+
+  @doc """
+  Returns the list of albums by artist.
+
+  ## Examples
+
+      iex> list_albums_by_artist()
+      [%Album{}, ...]
+
+  """
+  def list_albums_by_artist(artist) do
+    Album
+    |> where([album], album.artist_id == ^artist.id)
+    |> Repo.all()
   end
 
   @doc """
