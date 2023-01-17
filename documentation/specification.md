@@ -107,11 +107,13 @@ Potential action types
       1. `directories`: embedded JSON?
 5. Notifications
    1. `album_id:integer`
-   2. `title:string`
-   3. `payload:text`
-   4. `type:enum` - See https://hexdocs.pm/ecto/Ecto.Enum.html
-   5. `seen_at:utc_datetime_usec`
-   6. `mix phx.gen.live Notifications Notification notifications title:string payload:text type:string seen_at:utc_datetime_usec album_id:references:albums`
+   2. `icon:string`
+   3. `subject:string`
+   4. `body:text`
+   5. `url:text`
+   6. `type:enum` - See https://hexdocs.pm/ecto/Ecto.Enum.html
+   7. `seen_at:utc_datetime_usec`
+   8. `mix phx.gen.live Notifications Notification notifications icon:string subject:string body:text url:text type:string seen_at:utc_datetime_usec album_id:references:albums`
 6. Actions - Next
    1. `table_name:string`
    2. `table_id:integer`
