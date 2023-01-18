@@ -46,7 +46,7 @@ defmodule BeatseekWeb.Layouts do
         <li class="my-px">
           <span class="flex font-bold text-md text-primary-900 px-4 my-4 uppercase">Account</span>
         </li>
-        <li class="my-px">
+        <li :if={!is_nil(@current_user)} class="my-px">
           <.link
             navigate={~p"/users/settings"}
             class={
@@ -75,7 +75,7 @@ defmodule BeatseekWeb.Layouts do
             <.live_component module={NotificationBadge} id="notificationBadge" />
           </.link>
         </li>
-        <li class="my-px">
+        <li :if={!is_nil(@current_user)} class="my-px">
           <a
             href="#"
             class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
@@ -86,7 +86,7 @@ defmodule BeatseekWeb.Layouts do
             <span class="ml-3 font-bold">Settings</span>
           </a>
         </li>
-        <li class="my-px">
+        <li :if={!is_nil(@current_user)} class="my-px">
           <.link
             href={~p"/users/log_out"}
             method="delete"
