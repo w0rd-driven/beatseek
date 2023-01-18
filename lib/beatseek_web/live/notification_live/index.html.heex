@@ -1,51 +1,22 @@
-<.header>
-  Listing Notifications
-  <:actions>
-    <.link patch={~p"/notifications/new"}>
-      <.button>New Notification</.button>
-    </.link>
-  </:actions>
-</.header>
-
-<.table
-  id="notifications"
-  rows={@notifications}
-  row_click={&JS.navigate(~p"/notifications/#{&1}")}
->
-  <:col :let={notification} label="Icon"><%= notification.icon %></:col>
-  <:col :let={notification} label="Subject"><%= notification.subject %></:col>
-  <:col :let={notification} label="Body"><%= notification.body %></:col>
-  <:col :let={notification} label="Url"><%= notification.url %></:col>
-  <:col :let={notification} label="Type"><%= notification.type %></:col>
-  <:col :let={notification} label="Seen at"><%= notification.seen_at %></:col>
-  <:action :let={notification}>
-    <div class="sr-only">
-      <.link navigate={~p"/notifications/#{notification}"}>Show</.link>
+<article id="notifications" class="group flex-row">
+  <figure
+    :for={notification <- @notifications}
+    id={"notification-#{notification.id}"}
+    class="px-4 mt-4 py-4 rounded-lg text-primary-600 bg-supporting-yellow-400 hover:bg-primary-200"
+  >
+    <div class="flex flex-row justify-between">
+      <figcaption class="font-bold text-sm"><%= notification.subject %></figcaption>
+      <.link
+        :if={is_nil(notification.seen_at)}
+        class="text-secondary-400 my-auto ml-2"
+        phx-click={JS.push("delete", value: %{id: notification.id})}
+      >
+        <Heroicons.x_mark solid class="h-4 w-4 stroke-current" />
+      </.link>
     </div>
-    <.link patch={~p"/notifications/#{notification}/edit"}>Edit</.link>
-  </:action>
-  <:action :let={notification}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: notification.id})}
-      data-confirm="Are you sure?"
-    >
-      Delete
-    </.link>
-  </:action>
-</.table>
-
-<.modal
-  :if={@live_action in [:new, :edit]}
-  id="notification-modal"
-  show
-  on_cancel={JS.navigate(~p"/notifications")}
->
-  <.live_component
-    module={BeatseekWeb.NotificationLive.FormComponent}
-    id={@notification.id || :new}
-    title={@page_title}
-    action={@live_action}
-    notification={@notification}
-    navigate={~p"/notifications"}
-  />
-</.modal>
+    <div :if={!is_nil(notification.body)}><%= notification.body %></div>
+    <div :if={!is_nil(notification.seen_at)} class="text-gray-500 text-sm font-medium">
+      <%= notification.seen_at %>
+    </div>
+  </figure>
+</article>

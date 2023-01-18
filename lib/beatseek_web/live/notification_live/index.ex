@@ -6,7 +6,10 @@ defmodule BeatseekWeb.NotificationLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :notifications, list_notifications())}
+    {:ok,
+     socket
+     |> assign(:notifications, list_unseen_notifications())
+     |> assign(:active_tab, :notifications)}
   end
 
   @impl true
@@ -28,19 +31,19 @@ defmodule BeatseekWeb.NotificationLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Notifications")
+    |> assign(:page_title, "Notifications")
     |> assign(:notification, nil)
   end
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
     notification = Notifications.get_notification!(id)
-    {:ok, _} = Notifications.delete_notification(notification)
+    {:ok, _} = Notifications.mark_notification_as_seen(notification)
 
-    {:noreply, assign(socket, :notifications, list_notifications())}
+    {:noreply, assign(socket, :notifications, list_unseen_notifications())}
   end
 
-  defp list_notifications do
-    Notifications.list_notifications()
+  defp list_unseen_notifications do
+    Notifications.list_unseen_notifications()
   end
 end
