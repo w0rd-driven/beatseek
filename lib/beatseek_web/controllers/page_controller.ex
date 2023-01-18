@@ -8,6 +8,10 @@ defmodule BeatseekWeb.PageController do
   end
 
   def music(conn, _params) do
+    # We unfortunately need layout:false here
+    # conn
+    # |> assign(:active_tab, :artists)
+    # |> render(:music, layout: false)
     conn
     |> assign(:active_tab, :artists)
     |> redirect(to: ~p"/artists")

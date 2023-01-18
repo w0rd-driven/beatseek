@@ -21,27 +21,6 @@ defmodule BeatseekWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :music
-
-    live "/artists", ArtistLive.Index, :index
-    live "/artists/new", ArtistLive.Index, :new
-    live "/artists/:id/edit", ArtistLive.Index, :edit
-
-    live "/artists/:id", ArtistLive.Show, :show
-    live "/artists/:id/show/edit", ArtistLive.Show, :edit
-
-    live "/albums", AlbumLive.Index, :index
-    live "/albums/new", AlbumLive.Index, :new
-    live "/albums/:id/edit", AlbumLive.Index, :edit
-
-    live "/albums/:id", AlbumLive.Show, :show
-    live "/albums/:id/show/edit", AlbumLive.Show, :edit
-
-    live "/notifications", NotificationLive.Index, :index
-    live "/notifications/new", NotificationLive.Index, :new
-    live "/notifications/:id/edit", NotificationLive.Index, :edit
-
-    live "/notifications/:id", NotificationLive.Show, :show
-    live "/notifications/:id/show/edit", NotificationLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
@@ -101,6 +80,27 @@ defmodule BeatseekWeb.Router do
       on_mount: [{BeatseekWeb.UserAuth, :mount_current_user}] do
       live "/users/confirm/:token", UserConfirmationLive, :edit
       live "/users/confirm", UserConfirmationInstructionsLive, :new
+
+      live "/artists", ArtistLive.Index, :index
+      live "/artists/new", ArtistLive.Index, :new
+      live "/artists/:id/edit", ArtistLive.Index, :edit
+
+      live "/artists/:id", ArtistLive.Show, :show
+      live "/artists/:id/show/edit", ArtistLive.Show, :edit
+
+      live "/albums", AlbumLive.Index, :index
+      live "/albums/new", AlbumLive.Index, :new
+      live "/albums/:id/edit", AlbumLive.Index, :edit
+
+      live "/albums/:id", AlbumLive.Show, :show
+      live "/albums/:id/show/edit", AlbumLive.Show, :edit
+
+      live "/notifications", NotificationLive.Index, :index
+      live "/notifications/new", NotificationLive.Index, :new
+      live "/notifications/:id/edit", NotificationLive.Index, :edit
+
+      live "/notifications/:id", NotificationLive.Show, :show
+      live "/notifications/:id/show/edit", NotificationLive.Show, :edit
     end
   end
 end
