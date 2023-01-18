@@ -19,7 +19,7 @@ defmodule BeatseekWeb.Layouts do
           <.link
             navigate={~p"/artists"}
             class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100 #{if @active_tab == :artists, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :artists, do: "bg-gray-200", else: "hover:bg-primary-100"}"
             }
             aria-current={if @active_tab == :artists, do: "true", else: "false"}
           >
@@ -33,7 +33,7 @@ defmodule BeatseekWeb.Layouts do
           <.link
             navigate={~p"/albums"}
             class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100 #{if @active_tab == :albums, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :albums, do: "bg-gray-200", else: "hover:bg-primary-100"}"
             }
             aria-current={if @active_tab == :albums, do: "true", else: "false"}
           >
@@ -50,7 +50,7 @@ defmodule BeatseekWeb.Layouts do
           <.link
             navigate={~p"/users/settings"}
             class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100 #{if @active_tab == :settings, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :settings, do: "bg-gray-200", else: "hover:bg-primary-100"}"
             }
             aria-current={if @active_tab == :settings, do: "true", else: "false"}
           >
@@ -61,16 +61,19 @@ defmodule BeatseekWeb.Layouts do
           </.link>
         </li>
         <li class="my-px">
-          <a
-            href="#"
-            class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
+          <.link
+            navigate={~p"/notifications"}
+            class={
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :notifications, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+            }
+            aria-current={if @active_tab == :notifications, do: "true", else: "false"}
           >
             <span class="flex items-center justify-center text-lg text-primary-400">
               <Heroicons.bell_alert solid class="h-6 w-6 stroke-current" />
             </span>
             <span class="ml-3 font-bold">Notifications</span>
             <.live_component module={NotificationBadge} id="notificationBadge" />
-          </a>
+          </.link>
         </li>
         <li class="my-px">
           <a

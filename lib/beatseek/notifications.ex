@@ -101,4 +101,36 @@ defmodule Beatseek.Notifications do
   def change_notification(%Notification{} = notification, attrs \\ %{}) do
     Notification.changeset(notification, attrs)
   end
+
+  @doc """
+  Returns the list of notifications not seen yet.
+
+  ## Examples
+
+      iex> list_unseen_notifications()
+      [%Notification{}, ...]
+
+  """
+  def list_unseen_notifications do
+    Notification
+    |> where([notification], is_nil(notification.seen_at))
+    |> Repo.all()
+  end
+
+  @doc """
+  Marks a notification as seen.
+
+  ## Examples
+
+      iex> update_notification(notification)
+      {:ok, %Notification{}}
+
+  """
+  def mark_notification_as_seen(%Notification{} = notification) do
+    attrs = %{seen_at: DateTime.now!("Etc/UTC")}
+
+    notification
+    |> Notification.changeset(attrs)
+    |> Repo.update()
+  end
 end
