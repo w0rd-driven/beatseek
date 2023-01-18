@@ -3,6 +3,7 @@ defmodule BeatseekWeb.NotificationLive.Index do
 
   alias Beatseek.Notifications
   alias Beatseek.Notifications.Notification
+  alias BeatseekWeb.Components.NotificationBadge
 
   @impl true
   def mount(_params, _session, socket) do
@@ -39,7 +40,11 @@ defmodule BeatseekWeb.NotificationLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     notification = Notifications.get_notification!(id)
     {:ok, _} = Notifications.mark_notification_as_seen(notification)
-    BeatseekWeb.Endpoint.broadcast!("notifications", "seen", notification)
+
+    send_update(NotificationBadge,
+      id: "notificationBadge",
+      count: Notifications.get_unseen_notification_count()
+    )
 
     {:noreply, assign(socket, :notifications, list_unseen_notifications())}
   end

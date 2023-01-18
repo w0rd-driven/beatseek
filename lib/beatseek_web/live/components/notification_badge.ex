@@ -7,10 +7,6 @@ defmodule BeatseekWeb.Components.NotificationBadge do
 
   @impl true
   def mount(socket) do
-    if connected?(socket) do
-      BeatseekWeb.Endpoint.subscribe(@topic)
-    end
-
     count = 0
     {:ok, socket |> assign(count: count)}
   end
@@ -27,11 +23,5 @@ defmodule BeatseekWeb.Components.NotificationBadge do
       <%= @count %>
     </span>
     """
-  end
-
-  @impl true
-  def handle_info(%{topic: @topic}, socket) do
-    IO.inspect("I seent it")
-    {:noreply, socket |> assign(count: Notifications.get_unseen_notification_count())}
   end
 end

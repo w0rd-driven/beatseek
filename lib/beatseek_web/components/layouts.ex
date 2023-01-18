@@ -105,9 +105,10 @@ defmodule BeatseekWeb.Layouts do
 
   def footer_copyright(assigns) do
     this_year = Date.utc_today().year
+    assigns = assigns |> assign(:this_year, this_year)
 
     ~H"""
-    <span>© <%= this_year %> Jeremy Brayton</span>
+    <span>© <%= @this_year %> Jeremy Brayton</span>
     """
   end
 end
