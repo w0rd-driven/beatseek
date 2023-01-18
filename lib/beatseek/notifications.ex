@@ -118,6 +118,21 @@ defmodule Beatseek.Notifications do
   end
 
   @doc """
+  Returns a count notifications not seen yet.
+
+  ## Examples
+
+      iex> get_unseen_notification_count()
+      0
+
+  """
+  def get_unseen_notification_count do
+    Notification
+    |> where([notification], is_nil(notification.seen_at))
+    |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
   Marks a notification as seen.
 
   ## Examples
