@@ -1,15 +1,23 @@
 defmodule BeatseekWeb.Components.NotificationBadge do
   use BeatseekWeb, :live_component
 
+  alias Beatseek.Notifications
+
+  @topic "notifications"
+
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket |> assign(count: 0)}
+  def mount(socket) do
+    if connected?(socket) do
+      BeatseekWeb.Endpoint.subscribe(@topic)
+    end
+
+    count = 0
+    {:ok, socket |> assign(count: count)}
   end
 
   @impl true
-  def update(assigns, socket) do
-    # TODO Get count from Database
-    {:ok, socket |> assign(count: 1000)}
+  def update(_assigns, socket) do
+    {:ok, socket |> assign(count: Notifications.get_unseen_notification_count())}
   end
 
   @impl true
@@ -19,5 +27,11 @@ defmodule BeatseekWeb.Components.NotificationBadge do
       <%= @count %>
     </span>
     """
+  end
+
+  @impl true
+  def handle_info(%{topic: @topic}, socket) do
+    IO.inspect("I seent it")
+    {:noreply, socket |> assign(count: Notifications.get_unseen_notification_count())}
   end
 end

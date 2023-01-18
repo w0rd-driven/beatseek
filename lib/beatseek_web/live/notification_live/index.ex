@@ -39,6 +39,7 @@ defmodule BeatseekWeb.NotificationLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     notification = Notifications.get_notification!(id)
     {:ok, _} = Notifications.mark_notification_as_seen(notification)
+    BeatseekWeb.Endpoint.broadcast!("notifications", "seen", notification)
 
     {:noreply, assign(socket, :notifications, list_unseen_notifications())}
   end
