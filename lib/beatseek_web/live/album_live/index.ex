@@ -29,7 +29,7 @@ defmodule BeatseekWeb.AlbumLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Albums")
+    |> assign(:page_title, "Albums")
     |> assign(:album, nil)
   end
 
