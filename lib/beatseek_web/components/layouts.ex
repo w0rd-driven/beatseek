@@ -108,7 +108,7 @@ defmodule BeatseekWeb.Layouts do
     assigns = assigns |> assign(:this_year, this_year)
 
     ~H"""
-    <span>© <%= @this_year %> Jeremy Brayton</span>
+    <div class="font-medium text-lg text-primary-900">© <%= @this_year %> Jeremy Brayton</div>
     """
   end
 end
