@@ -3,17 +3,22 @@ defmodule BeatseekWeb.Components.NotificationBadge do
 
   alias Beatseek.Notifications
 
-  @topic "notifications"
-
   @impl true
   def mount(socket) do
-    count = 0
+    count = Notifications.get_unseen_notification_count()
     {:ok, socket |> assign(count: count)}
   end
 
   @impl true
-  def update(_assigns, socket) do
-    {:ok, socket |> assign(count: Notifications.get_unseen_notification_count())}
+  def update(assigns, socket) do
+    count =
+      case assigns do
+        %{action: :increment} -> socket.assigns.count + 1
+        %{action: :decrement} -> socket.assigns.count - 1
+        _ -> socket.assigns.count
+      end
+
+    {:ok, socket |> assign(count: count)}
   end
 
   @impl true

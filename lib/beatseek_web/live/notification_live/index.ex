@@ -41,10 +41,7 @@ defmodule BeatseekWeb.NotificationLive.Index do
     notification = Notifications.get_notification!(id)
     {:ok, _} = Notifications.mark_notification_as_seen(notification)
 
-    send_update(NotificationBadge,
-      id: "notificationBadge",
-      count: Notifications.get_unseen_notification_count()
-    )
+    BeatseekWeb.Endpoint.broadcast!("notifications", "seen", notification)
 
     {:noreply, assign(socket, :notifications, list_unseen_notifications())}
   end

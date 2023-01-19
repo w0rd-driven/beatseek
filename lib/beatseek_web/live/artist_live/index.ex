@@ -28,7 +28,7 @@ defmodule BeatseekWeb.ArtistLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Artists")
+    |> assign(:page_title, "Artists")
     |> assign(:artist, nil)
   end
 
