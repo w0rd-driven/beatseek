@@ -3,7 +3,7 @@
   <div class="flex flex-col pt-4 pl-10">
     <header class="sticky top-0 w-full bg-white divide-y-2 pt-2 pb-2 z-50">
       <div class="flex flex-row justify-between items-end">
-        <div class="text-3xl font-bold"><%= @artist.name %></div>
+        <h2 class="text-3xl font-bold"><%= @artist.name %></h2>
         <button
           id="artist_menu"
           type="button"
@@ -20,12 +20,12 @@
     </header>
     <div :for={album <- @albums} class="flex pt-14">
       <.album_art url={album.image_url} is_owned={album.is_owned} class="h-48 w-48 bg-gray-200" />
-      <div class="pl-12 text-2xl">
+      <h3 class="pl-12 text-2xl">
         <div class="text-black font-bold text-xl"><%= album.name %></div>
         <div class="flex flex-col text-gray-500 text-sm uppercase font-medium pt-1">
           <%= album.genre %> · <%= album.year %>
         </div>
-      </div>
+      </h3>
     </div>
   </div>
 </div>

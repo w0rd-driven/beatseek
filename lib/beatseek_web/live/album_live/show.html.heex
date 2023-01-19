@@ -6,7 +6,7 @@
       is_owned={@album.is_owned}
       class="flex-col h-48 w-48 bg-gray-200"
     />
-    <div class="pl-12 flex-row text-2xl">
+    <h2 class="pl-12 flex-row text-2xl">
       <div class="text-black font-bold"><%= @album.name %></div>
       <.link
         navigate={~p"/artists/#{@album.artist.id}"}
@@ -17,6 +17,6 @@
       <div class="flex flex-col text-gray-500 text-sm uppercase font-medium">
         <%= @album.genre %> · <%= @album.year %>
       </div>
-    </div>
+    </h2>
   </div>
 </div>

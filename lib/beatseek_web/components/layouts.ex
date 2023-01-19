@@ -10,7 +10,7 @@ defmodule BeatseekWeb.Layouts do
 
   def sidebar(assigns) do
     ~H"""
-    <div :if={!is_nil(@active_tab)} class="w-1/3 max-w-xs p-4">
+    <div :if={!is_nil(@active_tab)} class="w-1/3 max-w-xs py-4 pr-8">
       <ul class="flex flex-col w-full sticky top-0">
         <li class="my-px">
           <span class="flex font-bold text-md text-primary-900 px-4 mt-2 mb-4 uppercase">Music</span>
