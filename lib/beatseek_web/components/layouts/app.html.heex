@@ -1,23 +1,3 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <nav class="flex flex-col sm:flex-row justify-between items-center" aria-label="Header">
-    <ul>
-      <li class="">
-        <.link
-          navigate={~p"/"}
-          class="group pt-4 text-primary-600 flex flex-row justify-between items-center relative"
-        >
-          <span class="absolute left-0">
-            <Heroicons.signal solid class="h-14 w-14 stroke-current" />
-          </span>
-          <span class="text-secondary-200 absolute left-0 rotate-90">
-            <Heroicons.signal solid class="h-14 w-14 stroke-current animate-ping" />
-          </span>
-          <h1 class="font-logo text-6xl pl-14 italic tracking-tighter -rotate-1">Beatseek</h1>
-        </.link>
-      </li>
-    </ul>
-  </nav>
-</header>
 <main class="px-4 py-12 sm:px-6 lg:px-8">
   <div class="">
     <.flash kind={:info} title="Success!" flash={@flash} />
@@ -46,6 +26,6 @@
     </div>
   </div>
 </main>
-<footer>
+<footer class="h-12 px-8 w-full sticky bottom-0">
   <.footer_copyright />
 </footer>

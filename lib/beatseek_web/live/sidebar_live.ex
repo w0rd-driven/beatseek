@@ -28,9 +28,20 @@ defmodule BeatseekWeb.SidebarLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <ul class="flex flex-col w-full sticky top-0">
+    <ul class="flex flex-col sticky top-0 w-full min-w-md">
+      <li class="my-px mx-auto pt-4">
+        <.link navigate={~p"/"} class="group px-4 text-primary-600 flex flex-row relative">
+          <span class="absolute left-4">
+            <Heroicons.signal solid class="h-10 w-10 stroke-current" />
+          </span>
+          <span class="text-secondary-200 absolute left-4 rotate-90">
+            <Heroicons.signal solid class="h-10 w-10 stroke-current animate-ping" />
+          </span>
+          <h1 class="font-logo text-4xl pl-10 italic tracking-tighter -rotate-1">Beatseek</h1>
+        </.link>
+      </li>
       <li class="my-px">
-        <span class="flex font-bold text-md text-primary-900 px-4 mt-2 mb-4 uppercase">Music</span>
+        <span class="flex font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</span>
       </li>
       <li class="my-px">
         <.link
