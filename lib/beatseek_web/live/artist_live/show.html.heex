@@ -21,10 +21,7 @@
       <div class="text-gray-500 text-sm uppercase font-medium"><%= @album_count %> albums</div>
     </header>
     <div :for={album <- @albums} class="flex pt-14">
-      <img
-        src={if is_nil(album.image_url), do: "/images/album.svg", else: album.image_url}
-        class="h-48 w-48 bg-gray-200"
-      />
+      <.album_art url={album.image_url} is_owned={album.is_owned} class="h-48 w-48 bg-gray-200" />
       <div class="pl-12 text-2xl">
         <div class="text-black font-bold text-xl"><%= album.name %></div>
         <div class="flex flex-col text-gray-500 text-sm uppercase font-medium pt-1">

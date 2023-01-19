@@ -2,6 +2,7 @@ defmodule BeatseekWeb.AlbumLive.Show do
   use BeatseekWeb, :live_view
 
   alias Beatseek.Albums
+  import BeatseekWeb.Components.AlbumArt
 
   @impl true
   def mount(_params, _session, socket) do

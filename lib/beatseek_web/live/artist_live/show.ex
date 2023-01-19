@@ -3,6 +3,7 @@ defmodule BeatseekWeb.ArtistLive.Show do
 
   alias Beatseek.Artists
   alias Beatseek.Albums
+  import BeatseekWeb.Components.AlbumArt
 
   @impl true
   def mount(_params, _session, socket) do
