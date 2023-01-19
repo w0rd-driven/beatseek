@@ -19,8 +19,12 @@ defmodule Beatseek.Albums do
 
   """
   def list_albums do
-    Album
-    |> Repo.all()
+    query =
+      from album in Album,
+        join: artist in assoc(album, :artist),
+        order_by: artist.name
+
+    Repo.all(query)
     |> Repo.preload(:artist)
   end
 
@@ -36,6 +40,7 @@ defmodule Beatseek.Albums do
   def list_albums_by_artist(artist) do
     Album
     |> where([album], album.artist_id == ^artist.id)
+    |> order_by([album], asc: :year)
     |> Repo.all()
   end
 
