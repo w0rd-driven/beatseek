@@ -17,6 +17,7 @@ What I believe to be left:
 4. Implement the Spotify API logic.
     1. This is a **big fucking piece and kind of why this whole thing was made. Why am I leaving it until damn near last?**.
 5. Add `badge count` component to Artist.
+    1. This doesn't decrement or increment except via the scanner.
 6. Add `badge count` component to Albums.
     1. Owned only or Owned / Total
 7. Artist -> show
