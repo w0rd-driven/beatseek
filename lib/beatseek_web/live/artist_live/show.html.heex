@@ -1,7 +1,7 @@
 <div class="flex-row">
   <.back navigate={~p"/artists"}></.back>
   <div class="flex flex-col pt-4 pl-10">
-    <header class="sticky top-0 w-full bg-white divide-y-2 pt-2 pb-2">
+    <header class="sticky top-0 w-full bg-white divide-y-2 pt-2 pb-2 z-50">
       <div class="flex flex-row justify-between items-end">
         <div class="text-3xl font-bold"><%= @artist.name %></div>
         <button
@@ -15,8 +15,6 @@
         >
           <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
         </button>
-        <%!-- <span class="text-primary-200">
-        </span> --%>
       </div>
       <div class="text-gray-500 text-sm uppercase font-medium"><%= @album_count %> albums</div>
     </header>
