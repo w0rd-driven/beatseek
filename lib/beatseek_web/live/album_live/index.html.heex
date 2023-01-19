@@ -5,10 +5,7 @@
     phx-click={JS.navigate(~p"/albums/#{album.id}")}
   >
     <div class="">
-      <img
-        src={if is_nil(album.image_url), do: "/images/album.svg", else: album.image_url}
-        class="bg-gray-200"
-      />
+      <.album_art url={album.image_url} is_owned={album.is_owned} class="bg-gray-200" />
       <div class="flex-col text-sm">
         <div class="text-black font-medium pt-1"><%= album.name %></div>
         <.link

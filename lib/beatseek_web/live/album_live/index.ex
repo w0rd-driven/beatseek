@@ -3,6 +3,7 @@ defmodule BeatseekWeb.AlbumLive.Index do
 
   alias Beatseek.Albums
   alias Beatseek.Albums.Album
+  import BeatseekWeb.Components.AlbumArt
 
   @impl true
   def mount(_params, _session, socket) do
