@@ -13,21 +13,23 @@
 # Notifications
 alias Beatseek.Notifications
 
-not_owned = %{
-  subject: "This is a new not_owned notification",
-  type: "not_owned"
+album_not_owned = %{
+  subject: "This is a new album_not_owned notification",
+  type: "album_not_owned"
 }
 
-new_release = %{
-  subject: "This is a new new_release notification",
-  type: "new_release"
+album_new_release = %{
+  subject: "This is a new album_new_release notification",
+  type: "album_new_release"
 }
 
-upcoming_release = %{
-  subject: "This is a new upcoming_release notification",
-  type: "upcoming_release"
+album_upcoming_release = %{
+  subject: "This is a new album_upcoming_release notification",
+  type: "album_upcoming_release"
 }
 
-Notifications.create_notification(not_owned)
-Notifications.create_notification(new_release)
-Notifications.create_notification(upcoming_release)
+Enum.map(1..3, fn index ->
+  Notifications.create_notification(album_not_owned)
+  Notifications.create_notification(album_new_release)
+  Notifications.create_notification(album_upcoming_release)
+end)
