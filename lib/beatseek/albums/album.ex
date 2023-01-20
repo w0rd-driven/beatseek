@@ -19,6 +19,6 @@ defmodule Beatseek.Albums.Album do
   def changeset(album, attrs) do
     album
     |> cast(attrs, [:name, :genre, :year, :release_date, :is_owned, :path, :image_url, :artist_id])
-    |> validate_required([:name, :is_owned, :path])
+    |> validate_required([:name])
   end
 end

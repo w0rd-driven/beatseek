@@ -61,6 +61,29 @@ defmodule Beatseek.Albums do
   def get_album!(id), do: Repo.get!(Album, id) |> Repo.preload(:artist)
 
   @doc """
+  Gets a single album by name and artist_id.
+
+  ## Examples
+
+      iex> get_artist_album_by_name("Periphery")
+      {:ok, %Artist{}}
+
+      iex> get_artist_album_by_name("Baby Shark")
+      {:error, Ecto.NoResultsError}
+
+  """
+  def get_artist_album_by_name(name, artist_id) do
+    search = "%#{name}%"
+
+    Album
+    |> where([album], ilike(album.name, ^search))
+    |> where([album], album.artist_id == ^artist_id)
+    |> Repo.all()
+    |> Repo.preload(:artist)
+    |> Enum.at(0)
+  end
+
+  @doc """
   Creates a album.
 
   ## Examples

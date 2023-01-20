@@ -35,31 +35,25 @@ defmodule Beatseek.Notifications.Delivery do
   end
 
   def get_attributes_from_album(album) do
-    case Timex.parse(album.release_date, "{YYYY}-{0M}-{0D}") do
-      {:ok, datetime} ->
-        release_date = datetime |> NaiveDateTime.to_date()
-        today = NaiveDateTime.utc_now() |> NaiveDateTime.to_date()
-        humanized_date = Timex.format!(release_date, "%A, %B %d, %Y", :strftime)
-        interval = Timex.Interval.new(from: release_date, until: today)
+    release_date = album.release_date
+    today = Date.utc_today
+    humanized_date = Timex.format!(release_date, "%A, %B %d, %Y", :strftime)
+    interval = Timex.Interval.new(from: release_date, until: today)
 
-        type =
-          case Timex.Interval.duration(interval, :months) do
-            months when months < 0 -> "album_upcoming_release"
-            months when months <= 6 -> "album_new_release"
-            months when months > 7 -> "album_not_owned"
-            _ -> nil
-          end
+    type =
+      case Timex.Interval.duration(interval, :months) do
+        months when months < 0 -> "album_upcoming_release"
+        months when months <= 6 -> "album_new_release"
+        months when months > 7 -> "album_not_owned"
+        _ -> nil
+      end
 
-        attributes = %{
-          album_id: album.id,
-          subject: "#{album.name} was released on #{humanized_date}.",
-          type: type
-        }
-
-      {:error, _} ->
-        %{}
-    end
-  end
+    %{
+      album_id: album.id,
+      subject: "#{album.name} was released on #{humanized_date}.",
+      type: type
+    }
+end
 
   def send_app_notification(attributes) do
     {:ok, notification} = Notifications.create_notification(attributes)
