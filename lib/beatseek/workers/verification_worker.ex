@@ -3,7 +3,8 @@ defmodule Beatseek.Workers.VerificationWorker do
 
   import Ecto.Query
 
-  alias Beatseek.{Repo, User}
+  alias Beatseek.{Repo, Artist, Albums}
+  alias Beatseek.Verification.Spotify
 
   @backfill_delay 1
 
@@ -37,5 +38,7 @@ defmodule Beatseek.Workers.VerificationWorker do
   end
 
   defp update_albums(id) do
+    Spotify.verify(id)
+    |> Enum.at(0)
   end
 end

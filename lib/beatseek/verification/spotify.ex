@@ -1,17 +1,61 @@
 defmodule Beatseek.Verification.Spotify do
   alias Beatseek.Artists
+  alias Beatseek.Albums
   alias Beatseek.Transformers.SpotifyAlbumTransformer
   alias Spotify.Search
-  alias Spotify.Album
 
-  def verify(artist_id) do
-    get_artist_by_id(artist_id)
-    |> get_artist_albums_by_spotify_id()
+  def verify(id) do
+    conn = authenticate()
+    artist = Artists.get_artist!(id)
+    {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "artist", market: "US")
+    [head | _] = items
+    spotify_id = head.id
+    {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "album", market: "US")
+
+    albums =
+      items
+      |> Enum.filter(&(&1.album_type == "album"))
+      |> Enum.filter(fn album ->
+        album.artists |> Enum.any?(&(&1["id"] == spotify_id))
+      end)
+      |> Enum.map(&SpotifyAlbumTransformer.transform/1)
+      |> Enum.uniq(& &1.name)
+
+    %{artist: artist, albums: albums}
+    |> add_missing_albums()
   end
 
-  def get_artist_by_id(artist_id) do
-    artist = Artists.get_artist!(artist_id)
-    get_artist_id(artist.name)
+  def add_missing_albums(%{artist: artist, albums: albums} = _map) do
+    albums
+    |> Enum.map(fn album_params ->
+      find_existing(album_params, artist)
+      |> create_if_missing()
+      |> send_notification()
+    end)
+  end
+
+  def find_existing(album_params, artist) do
+    case Albums.get_artist_album_by_name(album_params.name, artist.id) do
+      album -> {album, album_params, artist}
+      nil -> {nil, album_params, artist}
+    end
+  end
+
+  def create_if_missing({album, params, artist}) when is_nil(album) do
+    params = params |> Map.put(:artist_id, artist.id)
+
+    case Albums.create_album(params) do
+      {:ok, record} -> record
+      {:error, _} -> nil
+    end
+  end
+
+  def create_if_missing({_album, _params, _artist}), do: nil
+
+  def send_notification(album) when is_nil(album), do: :ok
+
+  def send_notification(album) do
+    Beatseek.Notifications.Delivery.deliver(album)
   end
 
   def authenticate(params \\ %{grant_type: "client_credentials"}) do
@@ -19,39 +63,5 @@ defmodule Beatseek.Verification.Spotify do
       parsed_response = response.body |> Jason.decode!()
       Spotify.Credentials.get_tokens_from_response(parsed_response)
     end
-  end
-
-  def get_artist_id(name) do
-    conn = authenticate()
-    {:ok, %{items: items}} = Search.query(conn, q: name, type: "artist", market: "US")
-    [head | _] = items
-    %{conn: conn, spotify_id: head.id}
-  end
-
-  def get_artist_albums_by_spotify_id(%{conn: conn, spotify_id: spotify_id}) do
-    IO.inspect(spotify_id, label: "Spotify ID")
-    {:ok, albums} = Album.get_artists_albums(conn, spotify_id)
-    albums
-  end
-
-  def search_artist(artist_id) do
-    artist = Artists.get_artist!(artist_id)
-    search_albums(artist.name)
-  end
-
-  def search_albums(name) do
-    conn = authenticate()
-    {:ok, %{items: items}} = Search.query(conn, q: name, type: "artist", market: "US")
-    [head | _] = items
-    spotify_id = head.id
-    {:ok, %{items: items}} = Search.query(conn, q: name, type: "album", market: "US")
-
-    items
-    |> Enum.filter(&(&1.album_type == "album"))
-    |> Enum.filter(fn album ->
-      album.artists |> Enum.any?(&(&1["id"] == spotify_id))
-    end)
-    |> Enum.map(&(SpotifyAlbumTransformer.transform/1))
-    |> Enum.uniq(&(&1.name))
   end
 end
