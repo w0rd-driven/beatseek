@@ -19,7 +19,7 @@ defmodule Beatseek.MixProject do
   def application do
     [
       mod: {Beatseek.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:spotify_ex, :logger, :runtime_tools]
     ]
   end
 
@@ -53,7 +53,8 @@ defmodule Beatseek.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:timex, "~> 3.7"},
-      {:oban, "~> 2.13"}
+      {:oban, "~> 2.13"},
+      {:spotify_ex, "~> 2.3"}
     ]
   end
 

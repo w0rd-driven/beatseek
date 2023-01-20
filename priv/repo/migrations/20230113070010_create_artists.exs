@@ -6,7 +6,7 @@ defmodule Beatseek.Repo.Migrations.CreateArtists do
       add :name, :string
       add :path, :string
       add :image_url, :string
-      add :checked_at, :utc_datetime_usec
+      add :verified_at, :utc_datetime_usec
 
       timestamps()
     end

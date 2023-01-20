@@ -17,9 +17,11 @@ defmodule Beatseek.Application do
       # Start Finch
       {Finch, name: Beatseek.Finch},
       # Start the Endpoint (http/https)
-      BeatseekWeb.Endpoint
+      BeatseekWeb.Endpoint,
       # Start a worker by calling: Beatseek.Worker.start_link(arg)
       # {Beatseek.Worker, arg}
+      # Added Oban
+      {Oban, Application.fetch_env!(:beatseek, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

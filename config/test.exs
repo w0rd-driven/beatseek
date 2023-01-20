@@ -26,6 +26,9 @@ config :beatseek, BeatseekWeb.Endpoint,
 # In test we don't send emails.
 config :beatseek, Beatseek.Mailer, adapter: Swoosh.Adapters.Test
 
+# Configure Oban
+config :beatseek, Oban, testing: :manual
+
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
 

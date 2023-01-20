@@ -63,6 +63,10 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  config :spotify_ex,
+    client_id: System.get_env("SPOTIFY_CLIENT_ID"),
+    secret_key: System.get_env("SPOTIFY_CLIENT_SECRET")
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
