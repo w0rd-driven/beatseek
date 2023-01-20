@@ -24,7 +24,7 @@ defmodule BeatseekWeb.Components.NotificationBadge do
   @impl true
   def render(assigns) do
     ~H"""
-    <span class="flex items-center justify-center text-sm text-red-400 font-bold bg-primary-200 h-6 px-2 rounded-full ml-auto">
+    <span class="flex items-center justify-center text-sm text-red-600 font-black bg-primary-200 h-6 px-2 rounded-full ml-auto">
       <%= @count %>
     </span>
     """
