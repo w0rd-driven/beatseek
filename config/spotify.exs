@@ -28,4 +28,6 @@ spotify_scopes =
 config :spotify_ex,
   user_id: System.get_env("SPOTIFY_USER_ID"),
   callback_url: System.get_env("SPOTIFY_CALLBACK_URL") || "http://localhost:4000/authenticate",
+  client_id: System.get_env("SPOTIFY_CLIENT_ID"),
+  secret_key: System.get_env("SPOTIFY_CLIENT_SECRET"),
   scopes: [spotify_scopes]
