@@ -1,7 +1,6 @@
 defmodule BeatseekWeb.SidebarLive do
   use BeatseekWeb, :live_view
 
-  alias Beatseek.Notifications
   alias BeatseekWeb.Components.NotificationBadge
 
   @topic "notifications"
@@ -34,20 +33,34 @@ defmodule BeatseekWeb.SidebarLive do
           <span class="absolute left-4">
             <Heroicons.signal solid class="h-10 w-10 stroke-current" />
           </span>
-          <span class="text-secondary-200 absolute left-4 rotate-90">
+          <span class="text-secondary-400 absolute left-4">
+            <Heroicons.signal solid class="h-10 w-10 stroke-current animate-ping" />
+          </span>
+          <span class="text-secondary-400 absolute left-4 rotate-90">
             <Heroicons.signal solid class="h-10 w-10 stroke-current animate-ping" />
           </span>
           <h1 class="font-logo text-4xl pl-10 italic tracking-tighter -rotate-1">Beatseek</h1>
         </.link>
       </li>
-      <li class="my-px">
-        <span class="flex font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</span>
+      <li class="my-px flex flex-row justify-between">
+        <div class="font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</div>
+        <button
+          id="artist_menu"
+          type="button"
+          class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
+          phx-click={}
+          phx-hook="MusicMenu"
+          data-active-class="bg-gray-100"
+          aria-haspopup="true"
+        >
+          <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
+        </button>
       </li>
       <li class="my-px">
         <.link
           navigate={~p"/artists"}
           class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :artists, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200 #{if @active_tab == :artists, do: "bg-secondary-300"}"
             }
           aria-current={if @active_tab == :artists, do: "true", else: "false"}
         >
@@ -61,7 +74,7 @@ defmodule BeatseekWeb.SidebarLive do
         <.link
           navigate={~p"/albums"}
           class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :albums, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200 #{if @active_tab == :albums, do: "bg-secondary-300"}"
             }
           aria-current={if @active_tab == :albums, do: "true", else: "false"}
         >
@@ -78,7 +91,7 @@ defmodule BeatseekWeb.SidebarLive do
         <.link
           navigate={~p"/users/settings"}
           class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :settings, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200 #{if @active_tab == :settings, do: "bg-secondary-300"}"
             }
           aria-current={if @active_tab == :settings, do: "true", else: "false"}
         >
@@ -92,7 +105,7 @@ defmodule BeatseekWeb.SidebarLive do
         <.link
           navigate={~p"/notifications"}
           class={
-              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 #{if @active_tab == :notifications, do: "bg-gray-200", else: "hover:bg-primary-100"}"
+              "group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200 #{if @active_tab == :notifications, do: "bg-secondary-300"}"
             }
           aria-current={if @active_tab == :notifications, do: "true", else: "false"}
         >
@@ -106,7 +119,7 @@ defmodule BeatseekWeb.SidebarLive do
       <li :if={!is_nil(@current_user)} class="my-px">
         <a
           href="#"
-          class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
+          class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200"
         >
           <span class="flex items-center justify-center text-lg text-primary-400">
             <Heroicons.cog_8_tooth solid class="h-6 w-6 stroke-current" />
@@ -118,7 +131,7 @@ defmodule BeatseekWeb.SidebarLive do
         <.link
           href={~p"/users/log_out"}
           method="delete"
-          class="group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-100"
+          class="group flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200"
         >
           <span class="flex items-center justify-center text-lg text-red-400">
             <Heroicons.lock_open solid class="h-6 w-6 stroke-current" />
@@ -131,7 +144,7 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "new"} = message, socket) do
+  def handle_info(%{topic: @topic, event: "new"}, socket) do
     send_update(NotificationBadge,
       id: "notificationBadge",
       action: :increment
@@ -141,7 +154,7 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "seen"} = message, socket) do
+  def handle_info(%{topic: @topic, event: "seen"}, socket) do
     send_update(NotificationBadge,
       id: "notificationBadge",
       action: :decrement

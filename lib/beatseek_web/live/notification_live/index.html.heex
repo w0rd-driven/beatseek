@@ -11,7 +11,7 @@
         class="text-secondary-400 my-auto ml-2"
         phx-click={JS.push("delete", value: %{id: notification.id})}
       >
-        <Heroicons.x_mark solid class="h-4 w-4 stroke-current" />
+        <Heroicons.x_circle solid class="h-6 w-6 fill-current stroke-primary-900" />
       </.link>
     </div>
     <div :if={!is_nil(notification.body)}><%= notification.body %></div>
