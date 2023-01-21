@@ -57,7 +57,9 @@ defmodule Beatseek.Verification.Spotify do
     params = params |> Map.put(:artist_id, artist.id)
 
     case Albums.create_album(params) do
-      {:ok, record} -> record
+      {:ok, record} ->
+        BeatseekWeb.Endpoint.broadcast!("albums", "new", record)
+        record
       {:error, _} -> nil
     end
   end
