@@ -29,7 +29,7 @@ defmodule Beatseek.Verification.Spotify do
         album.artists |> Enum.any?(&(&1["id"] == spotify_id))
       end)
       |> Enum.map(&SpotifyAlbumTransformer.transform/1)
-      |> Enum.uniq(& &1.name)
+      |> Enum.uniq_by(& &1.name)
 
     %{artist: artist, albums: albums}
   end
@@ -48,8 +48,6 @@ defmodule Beatseek.Verification.Spotify do
       album ->
         is_nil(album) || Albums.update_album(album, %{image_url: album_params[:image_url]})
         {album, album_params, artist}
-      nil ->
-        {nil, album_params, artist}
     end
   end
 
@@ -60,7 +58,9 @@ defmodule Beatseek.Verification.Spotify do
       {:ok, record} ->
         BeatseekWeb.Endpoint.broadcast!("albums", "new", record)
         record
-      {:error, _} -> nil
+
+      {:error, _} ->
+        nil
     end
   end
 

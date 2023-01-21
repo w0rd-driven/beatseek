@@ -3,7 +3,8 @@ defmodule Beatseek.Workers.VerificationWorker do
 
   import Ecto.Query
 
-  alias Beatseek.{Repo, Artist, Albums}
+  alias Beatseek.{Repo, Artists}
+  alias Beatseek.Artists.Artist
   alias Beatseek.Verification.Spotify
 
   @backfill_delay 1
@@ -42,14 +43,19 @@ defmodule Beatseek.Workers.VerificationWorker do
       Spotify.verify(id)
       |> Enum.at(0)
 
-    if result == :ok do
-      artist = Artists.get_artist!(id)
+    result =
+      case result do
+        :ok ->
+          artist = Artists.get_artist!(id)
+          is_nil(artist) || Artists.update_artist(artist, %{verified_at: DateTime.utc_now()})
 
-      case Artists.update_artist(artist, %{verified_at: DateTime.utc_now("Etc/UTC")}) do
-        _ -> nil
+        [] ->
+          :ok
+
+        nil ->
+          :ok
       end
-    end
 
-    result
+    :ok
   end
 end
