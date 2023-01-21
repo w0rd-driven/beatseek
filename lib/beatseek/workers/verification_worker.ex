@@ -38,7 +38,18 @@ defmodule Beatseek.Workers.VerificationWorker do
   end
 
   defp update_albums(id) do
-    Spotify.verify(id)
-    |> Enum.at(0)
+    result =
+      Spotify.verify(id)
+      |> Enum.at(0)
+
+    if result == :ok do
+      artist = Artists.get_artist!(id)
+
+      case Artists.update_artist(artist, %{verified_at: DateTime.utc_now("Etc/UTC")}) do
+        _ -> nil
+      end
+    end
+
+    result
   end
 end

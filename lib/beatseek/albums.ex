@@ -22,7 +22,7 @@ defmodule Beatseek.Albums do
     query =
       from album in Album,
         join: artist in assoc(album, :artist),
-        order_by: artist.name
+        order_by: [asc: artist.name, asc: album.year]
 
     Repo.all(query)
     |> Repo.preload(:artist)
@@ -66,7 +66,7 @@ defmodule Beatseek.Albums do
   ## Examples
 
       iex> get_artist_album_by_name("Periphery")
-      {:ok, %Artist{}}
+      {:ok, %Album{}}
 
       iex> get_artist_album_by_name("Baby Shark")
       {:error, Ecto.NoResultsError}

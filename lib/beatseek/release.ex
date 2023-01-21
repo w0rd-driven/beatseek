@@ -29,13 +29,16 @@ defmodule Beatseek.Release do
   defp drop_database(repo) do
     case repo.__adapter__.storage_down(repo.config) do
       :ok ->
-        IO.puts "The database for #{inspect repo} has been dropped"
+        IO.puts("The database for #{inspect(repo)} has been dropped")
+
       {:error, :already_down} ->
-        IO.puts "The database for #{inspect repo} has already been dropped"
+        IO.puts("The database for #{inspect(repo)} has already been dropped")
+
       {:error, term} when is_binary(term) ->
-        raise "The database for #{inspect repo} couldn't be dropped: #{term}"
+        raise "The database for #{inspect(repo)} couldn't be dropped: #{term}"
+
       {:error, term} ->
-        raise "The database for #{inspect repo} couldn't be dropped: #{inspect term}"
+        raise "The database for #{inspect(repo)} couldn't be dropped: #{inspect(term)}"
     end
   end
 

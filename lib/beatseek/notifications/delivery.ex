@@ -36,7 +36,7 @@ defmodule Beatseek.Notifications.Delivery do
 
   def get_attributes_from_album(album) do
     release_date = album.release_date
-    today = Date.utc_today
+    today = Date.utc_today()
     humanized_date = Timex.format!(release_date, "%A, %B %d, %Y", :strftime)
     interval = Timex.Interval.new(from: release_date, until: today)
 
@@ -48,12 +48,14 @@ defmodule Beatseek.Notifications.Delivery do
         _ -> nil
       end
 
+    album = album |> Beatseek.Repo.preload(:artist, force: true)
+
     %{
       album_id: album.id,
-      subject: "#{album.name} was released on #{humanized_date}.",
+      subject: "#{album.artist.name} released #{album.name} on #{humanized_date}.",
       type: type
     }
-end
+  end
 
   def send_app_notification(attributes) do
     {:ok, notification} = Notifications.create_notification(attributes)
