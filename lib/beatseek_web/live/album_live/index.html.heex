@@ -5,17 +5,10 @@
     phx-click={JS.navigate(~p"/albums/#{album.id}")}
   >
     <div class="">
-      <.album_art
-        url={album.image_url}
-        is_owned={album.is_owned}
-        class="bg-neutral-400 rounded-lg"
-      />
+      <.album_art url={album.image_url} is_owned={album.is_owned} class="bg-neutral-400 rounded-lg" />
       <div class="flex-col text-sm">
         <h2 class="text-black font-medium pt-1"><%= album.name %></h2>
-        <.link
-          navigate={~p"/artists/#{album.artist.id}"}
-          class="group h-12 rounded-lg text-primary-600 hover:underline"
-        >
+        <.link navigate={~p"/artists/#{album.artist.id}"} class="group h-12 rounded-lg text-primary-600 hover:underline">
           <%= album.artist.name %>
         </.link>
       </div>

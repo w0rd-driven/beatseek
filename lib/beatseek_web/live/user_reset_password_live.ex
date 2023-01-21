@@ -8,24 +8,13 @@ defmodule BeatseekWeb.UserResetPasswordLive do
     <div class="mx-auto max-w-sm">
       <.header class="text-center">Reset Password</.header>
 
-      <.simple_form
-        :let={f}
-        for={@changeset}
-        id="reset_password_form"
-        phx-submit="reset_password"
-        phx-change="validate"
-      >
+      <.simple_form :let={f} for={@changeset} id="reset_password_form" phx-submit="reset_password" phx-change="validate">
         <.error :if={@changeset.action == :insert}>
           Oops, something went wrong! Please check the errors below.
         </.error>
 
         <.input field={{f, :password}} type="password" label="New password" required />
-        <.input
-          field={{f, :password_confirmation}}
-          type="password"
-          label="Confirm new password"
-          required
-        />
+        <.input field={{f, :password_confirmation}} type="password" label="Confirm new password" required />
         <:actions>
           <.button phx-disable-with="Resetting..." class="w-full">Reset Password</.button>
         </:actions>

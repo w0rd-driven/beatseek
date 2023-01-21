@@ -21,16 +21,11 @@ defmodule Beatseek.MP3Stat do
 
   @declared_frame_ids ~w(AENC APIC ASPI COMM COMR ENCR EQU2 ETCO GEOB GRID LINK MCDI MLLT OWNE PRIV PCNT POPM POSS RBUF RVA2 RVRB SEEK SIGN SYLT SYTC TALB TBPM TCOM TCON TCOP TDEN TDLY TDOR TDRC TDRL TDTG TENC TEXT TFLT TIPL TIT1 TIT2 TIT3 TKEY TLAN TLEN TMCL TMED TMOO TOAL TOFN TOLY TOPE TOWN TPE1 TPE2 TPE3 TPE4 TPOS TPRO TPUB TRCK TRSN TRSO TSOA TSOP TSOT TSRC TSSE TSST TXXX UFID USER USLT WCOM WCOP WOAF WOAR WOAS WORS WPAY WPUB WXXX)
 
-  @v1_l1_bitrates {:invalid, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,
-                   :invalid}
-  @v1_l2_bitrates {:invalid, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384,
-                   :invalid}
-  @v1_l3_bitrates {:invalid, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320,
-                   :invalid}
-  @v2_l1_bitrates {:invalid, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256,
-                   :invalid}
-  @v2_l2_l3_bitrates {:invalid, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160,
-                      :invalid}
+  @v1_l1_bitrates {:invalid, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, :invalid}
+  @v1_l2_bitrates {:invalid, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, :invalid}
+  @v1_l3_bitrates {:invalid, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, :invalid}
+  @v2_l1_bitrates {:invalid, 32, 48, 56, 64, 80, 96, 112, 128, 144, 160, 176, 192, 224, 256, :invalid}
+  @v2_l2_l3_bitrates {:invalid, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, :invalid}
 
   def to_mmss(duration) when is_integer(duration) do
     hours = div(duration, 60 * 60)
@@ -67,7 +62,8 @@ defmodule Beatseek.MP3Stat do
            album: album,
            artist: artist,
            year: year,
-           genre: genre
+           genre: genre,
+           picture: picture
          }}
 
       _other ->
@@ -98,7 +94,8 @@ defmodule Beatseek.MP3Stat do
        album: album,
        artist: artist,
        year: year,
-       genre: genre
+       genre: genre,
+       picture: picture
      }}
   rescue
     _ -> {:error, :bad_file}
@@ -252,8 +249,7 @@ defmodule Beatseek.MP3Stat do
 
     <<picture_type::size(8), rest::binary>> = rest
 
-    {description, desc_len, rest} =
-      decode_string(text_encoding, frame_size - 1 - mime_len - 1, rest)
+    {description, desc_len, rest} = decode_string(text_encoding, frame_size - 1 - mime_len - 1, rest)
 
     image_data_size = frame_size - 1 - mime_len - 1 - desc_len
     {image_data, rest} = :erlang.split_binary(rest, image_data_size)
@@ -395,14 +391,14 @@ defmodule Beatseek.MP3Stat do
   defp lookup_layer(0b11), do: :layer1
 
   defp lookup_sampling_rate(_version, 0b11), do: :invalid
-  defp lookup_sampling_rate(:version1, 0b00), do: 44100
-  defp lookup_sampling_rate(:version1, 0b01), do: 48000
-  defp lookup_sampling_rate(:version1, 0b10), do: 32000
-  defp lookup_sampling_rate(:version2, 0b00), do: 22050
-  defp lookup_sampling_rate(:version2, 0b01), do: 24000
-  defp lookup_sampling_rate(:version2, 0b10), do: 16000
-  defp lookup_sampling_rate(:version25, 0b00), do: 11025
-  defp lookup_sampling_rate(:version25, 0b01), do: 12000
+  defp lookup_sampling_rate(:version1, 0b00), do: 44_100
+  defp lookup_sampling_rate(:version1, 0b01), do: 48_000
+  defp lookup_sampling_rate(:version1, 0b10), do: 32_000
+  defp lookup_sampling_rate(:version2, 0b00), do: 22_050
+  defp lookup_sampling_rate(:version2, 0b01), do: 24_000
+  defp lookup_sampling_rate(:version2, 0b10), do: 16_000
+  defp lookup_sampling_rate(:version25, 0b00), do: 11_025
+  defp lookup_sampling_rate(:version25, 0b01), do: 12_000
   defp lookup_sampling_rate(:version25, 0b10), do: 8000
 
   defp lookup_bitrate(_version, _layer, 0), do: :invalid

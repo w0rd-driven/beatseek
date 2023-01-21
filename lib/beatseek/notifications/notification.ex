@@ -8,8 +8,7 @@ defmodule Beatseek.Notifications.Notification do
     field :seen_at, :utc_datetime_usec
     field :subject, :string
 
-    field :type, Ecto.Enum,
-      values: [:album_not_owned, :album_new_release, :album_upcoming_release]
+    field :type, Ecto.Enum, values: [:album_not_owned, :album_new_release, :album_upcoming_release]
 
     field :url, :string
     field :album_id, :id

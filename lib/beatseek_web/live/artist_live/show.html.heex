@@ -19,11 +19,7 @@
       <div class="text-gray-500 text-sm uppercase font-medium"><%= @album_count %> albums</div>
     </header>
     <div :for={album <- @albums} class="flex pt-14">
-      <.album_art
-        url={album.image_url}
-        is_owned={album.is_owned}
-        class="h-48 w-48 bg-neutral-400 rounded-lg"
-      />
+      <.album_art url={album.image_url} is_owned={album.is_owned} class="h-48 w-48 bg-neutral-400 rounded-lg" />
       <h3 class="pl-12 text-2xl">
         <div class="text-black font-bold text-xl"><%= album.name %></div>
         <div class="flex flex-col text-gray-600 text-sm uppercase font-bold pt-1">

@@ -12,14 +12,7 @@ defmodule BeatseekWeb.AlbumLive.FormComponent do
         <:subtitle>Use this form to manage album records in your database.</:subtitle>
       </.header>
 
-      <.simple_form
-        :let={f}
-        for={@changeset}
-        id="album-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
+      <.simple_form :let={f} for={@changeset} id="album-form" phx-target={@myself} phx-change="validate" phx-submit="save">
         <.input field={{f, :name}} type="text" label="Name" />
         <.input field={{f, :genre}} type="text" label="Genre" />
         <.input field={{f, :year}} type="text" label="Year" />

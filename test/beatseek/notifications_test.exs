@@ -30,8 +30,7 @@ defmodule Beatseek.NotificationsTest do
         url: "some url"
       }
 
-      assert {:ok, %Notification{} = notification} =
-               Notifications.create_notification(valid_attrs)
+      assert {:ok, %Notification{} = notification} = Notifications.create_notification(valid_attrs)
 
       assert notification.body == "some body"
       assert notification.icon == "some icon"
@@ -57,8 +56,7 @@ defmodule Beatseek.NotificationsTest do
         url: "some updated url"
       }
 
-      assert {:ok, %Notification{} = notification} =
-               Notifications.update_notification(notification, update_attrs)
+      assert {:ok, %Notification{} = notification} = Notifications.update_notification(notification, update_attrs)
 
       assert notification.body == "some updated body"
       assert notification.icon == "some updated icon"
@@ -71,8 +69,7 @@ defmodule Beatseek.NotificationsTest do
     test "update_notification/2 with invalid data returns error changeset" do
       notification = notification_fixture()
 
-      assert {:error, %Ecto.Changeset{}} =
-               Notifications.update_notification(notification, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Notifications.update_notification(notification, @invalid_attrs)
 
       assert notification == Notifications.get_notification!(notification.id)
     end
