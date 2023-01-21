@@ -10,8 +10,7 @@ defmodule Beatseek.Transformers.ArtistTransformer do
     # See https://elixirforum.com/t/string-capitalize-should-have-a-leave-the-rest-of-the-word-alone-option/31095
     artist
     |> String.split(~r{\s}, trim: true)
-    |> Enum.map(&String.capitalize/1)
-    |> Enum.join(" ")
+    |> Enum.map_join(" ", &String.capitalize/1)
   end
 
   defp get_path(path, artist) do
