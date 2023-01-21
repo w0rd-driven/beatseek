@@ -16,7 +16,7 @@
           <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
         </button>
       </div>
-      <div class="text-gray-500 text-sm uppercase font-medium"><%= @album_count %> albums</div>
+      <div class="text-gray-600 text-sm uppercase font-bold"><%= @album_count %> albums</div>
     </header>
     <div :for={album <- @albums} class="flex pt-14">
       <.album_art url={album.image_url} is_owned={album.is_owned} class="h-48 w-48 bg-neutral-400 rounded-lg" />
