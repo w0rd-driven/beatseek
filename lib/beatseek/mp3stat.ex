@@ -33,8 +33,7 @@ defmodule Beatseek.MP3Stat do
     seconds = rem(duration - hours * 60 * 60 - minutes * 60, 60)
 
     [minutes, seconds]
-    |> Enum.map(fn count -> String.pad_leading("#{count}", 2, ["0"]) end)
-    |> Enum.join(":")
+    |> Enum.map_join(":", fn count -> String.pad_leading("#{count}", 2, ["0"]) end)
   end
 
   def parse(path) do
