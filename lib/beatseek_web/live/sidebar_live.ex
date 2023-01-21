@@ -117,10 +117,7 @@ defmodule BeatseekWeb.SidebarLive do
         </.link>
       </li>
       <li :if={!is_nil(@current_user)} class="my-px">
-        <a
-          href="#"
-          class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200"
-        >
+        <a href="#" class="flex flex-row items-center h-12 px-4 rounded-lg text-primary-600 hover:bg-primary-200">
           <span class="flex items-center justify-center text-lg text-primary-400">
             <Heroicons.cog_8_tooth solid class="h-6 w-6 stroke-current" />
           </span>

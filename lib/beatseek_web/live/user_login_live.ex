@@ -15,14 +15,7 @@ defmodule BeatseekWeb.UserLoginLive do
         </:subtitle>
       </.header>
 
-      <.simple_form
-        :let={f}
-        id="login_form"
-        for={:user}
-        action={~p"/users/log_in"}
-        as={:user}
-        phx-update="ignore"
-      >
+      <.simple_form :let={f} id="login_form" for={:user} action={~p"/users/log_in"} as={:user} phx-update="ignore">
         <.input field={{f, :email}} type="email" label="Email" required />
         <.input field={{f, :password}} type="password" label="Password" required />
 

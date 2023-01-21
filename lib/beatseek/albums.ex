@@ -6,7 +6,6 @@ defmodule Beatseek.Albums do
   import Ecto.Query, warn: false
   alias Beatseek.Repo
 
-  alias Beatseek.Artists.Artist
   alias Beatseek.Albums.Album
 
   @doc """

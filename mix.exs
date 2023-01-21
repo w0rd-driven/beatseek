@@ -8,8 +8,24 @@ defmodule Beatseek.MixProject do
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
+      # See https://hexdocs.pm/mix/1.14.3/Mix.Tasks.Compile.Protocols.html
+      consolidate_protocols: Mix.env() != :test,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        check: :test,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.html": :test
+      ],
+      dialyzer: [
+        ignore_warnings: ".dialyzer_ignore.exs",
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"},
+        flags: [:error_handling, :race_conditions, :unknown],
+        # Error out when an ignore rule is no longer useful so we can remove it
+        list_unused_filters: true
+      ]
     ]
   end
 
@@ -52,6 +68,10 @@ defmodule Beatseek.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:credo, "~> 1.6.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.2", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.15.0", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.11", only: :dev},
       {:timex, "~> 3.7"},
       {:oban, "~> 2.13"},
       {:spotify_ex, "~> 2.3"}
@@ -71,7 +91,16 @@ defmodule Beatseek.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      check: [
+        "clean",
+        "deps.unlock --check-unused",
+        "compile --warnings-as-errors",
+        "format --check-formatted",
+        "deps.unlock --check-unused",
+        "test --warnings-as-errors",
+        "credo"
+      ]
     ]
   end
 end

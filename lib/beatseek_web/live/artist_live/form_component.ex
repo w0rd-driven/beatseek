@@ -12,14 +12,7 @@ defmodule BeatseekWeb.ArtistLive.FormComponent do
         <:subtitle>Use this form to manage artist records in your database.</:subtitle>
       </.header>
 
-      <.simple_form
-        :let={f}
-        for={@changeset}
-        id="artist-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
+      <.simple_form :let={f} for={@changeset} id="artist-form" phx-target={@myself} phx-change="validate" phx-submit="save">
         <.input field={{f, :name}} type="text" label="Name" />
         <.input field={{f, :path}} type="text" label="Path" />
         <.input field={{f, :image_url}} type="text" label="Image url" />
