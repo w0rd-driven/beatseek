@@ -19,7 +19,7 @@ jobs:
     # Remove if you don't need a database
     services:
       db:
-        image: postgres/postgres:14
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
