@@ -63,6 +63,6 @@ defmodule Beatseek.Notifications.Delivery do
     # I see why we keep this tied to the web. It's better to alias business logic in the web than the other way around
     #   I'm kind of stuck here though because something would always call into that. I need to send a pubsub event triggered
     #   from this layer. I don't see a way around that.
-    BeatseekWeb.Endpoint.broadcast!("notifications", "new", notification)
+    BeatseekWeb.Endpoint.broadcast!("notification", "new", notification)
   end
 end

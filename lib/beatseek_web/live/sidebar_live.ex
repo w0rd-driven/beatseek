@@ -2,13 +2,19 @@ defmodule BeatseekWeb.SidebarLive do
   use BeatseekWeb, :live_view
 
   alias BeatseekWeb.Components.ArtistBadge
+  alias BeatseekWeb.Components.AlbumBadge
   alias BeatseekWeb.Components.NotificationBadge
+
+  @artist_topic "artist"
+  @album_topic "artist"
+  @notification_topic "artist"
 
   @impl true
   def mount(_params, session, socket) do
     if connected?(socket) do
-      BeatseekWeb.Endpoint.subscribe("artists")
-      BeatseekWeb.Endpoint.subscribe("notifications")
+      BeatseekWeb.Endpoint.subscribe(@artist_topic)
+      BeatseekWeb.Endpoint.subscribe(@album_topic)
+      BeatseekWeb.Endpoint.subscribe(@notification_topic)
     end
 
     %{"active_tab" => active_tab, "current_user" => current_user} = session
@@ -83,6 +89,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.rectangle_group solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Albums</span>
+          <.live_component module={AlbumBadge} id="albumBadge" />
         </.link>
       </li>
       <li class="my-px">
@@ -142,7 +149,7 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: "notification", event: "new"}, socket) do
+  def handle_info(%{topic: @notification_topic, event: "new"}, socket) do
     send_update(NotificationBadge,
       id: "notificationBadge",
       action: :increment
@@ -152,7 +159,7 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: "notification", event: "seen"}, socket) do
+  def handle_info(%{topic: @notification_topic, event: "seen"}, socket) do
     send_update(NotificationBadge,
       id: "notificationBadge",
       action: :decrement
@@ -162,7 +169,7 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: "artist", event: "created"}, socket) do
+  def handle_info(%{topic: @artist_topic, event: "created"}, socket) do
     send_update(ArtistBadge,
       id: "artistBadge",
       action: :increment
@@ -172,9 +179,29 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: "artist", event: "deleted"}, socket) do
+  def handle_info(%{topic: @artist_topic, event: "deleted"}, socket) do
     send_update(ArtistBadge,
       id: "artistBadge",
+      action: :decrement
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{topic: @album_topic, event: "created"}, socket) do
+    send_update(AlbumBadge,
+      id: "albumBadge",
+      action: :increment
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{topic: @album_topic, event: "deleted"}, socket) do
+    send_update(AlbumBadge,
+      id: "albumBadge",
       action: :decrement
     )
 
