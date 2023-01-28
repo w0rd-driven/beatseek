@@ -6,8 +6,8 @@ defmodule BeatseekWeb.SidebarLive do
   alias BeatseekWeb.Components.NotificationBadge
 
   @artist_topic "artist"
-  @album_topic "artist"
-  @notification_topic "artist"
+  @album_topic "album"
+  @notification_topic "notification"
 
   @impl true
   def mount(_params, session, socket) do
