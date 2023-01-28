@@ -1,6 +1,6 @@
 # Developer Diary
 
-The following are entries for each day I worked on the project until the demo day. Hopefully I'll track this through to completion but this takes up a not insignificant amount of time.
+The following are entries for each day I worked on the project until the demo day.
 
 ## Table of Contents
 
@@ -13,6 +13,4 @@ The following are entries for each day I worked on the project until the demo da
 7. [Day 7 :: Wednesday, January 18](day07.md)
 8. [Day 8 :: Thursday, January 19](day08.md)
 9. [Day 9 :: Thursday, January 20](day09.md)
-10. Capstone complete!!
-
-TODO: Add a postmortem and a new section to cover the lead up to public release. I want to get tests passing and a more robust experience before I advertise completion. It should be a GitHub portfolio piece as-is though.
+10. [Capstone complete!!](cohort-retrospective.md)

@@ -10,7 +10,7 @@ Now, Next, Later
 3. Filter unique metadata for Artist and Album.
    1. Later: Merge records.
 4. Store metadata in database tables.
-5. Background worker checks Spotify or another music API for missing albums.
+5. Background worker ~~checks~~ verifies Spotify or another music API for missing albums.
 6. Create a UI to display artist information.
    1. Absolutely steal from prior art like Apple Music, Amazon Music, Spotify, etc. This should be familiar
 7. Send notifications.
@@ -49,7 +49,7 @@ Albums are either owned as found by the ID3 crawler or not as found on Spotify. 
 
 ### Setting
 
-This is where stuff starts to fall down because there are settings for scanning (local) and checking the API which can live anywhere. The v3 scanner would need to be configured independently and execute independently in this scenario.
+This is where stuff starts to fall down because there are settings for scanning (local) and verifying the API which can live anywhere. The v3 scanner would need to be configured independently and execute independently in this scenario.
 If I make this a standalone application that solves most of this. I can still put up a demo on Fly.io, scanning would just not be functional as the local directories wouldn't exist there.
 
 ### Notification
@@ -58,7 +58,7 @@ Collection of notifications
 
 Potential notification types
 
-1. Album not owned and checked initially.
+1. Album not owned and verified initially.
 2. New releases. These are within x date, 6 months to a year? What defines a new release?
    1. Over the course of using the application, these should pop up ahead of time like on iTunes.
    2. This whole application was designed around replicating how iTunes alerts on new albums for a single artist. We want a UI that can handle and showcase several.
@@ -84,8 +84,8 @@ Potential action types
       1. Calculated by ID3 tag parent parent directory, if the names match within a threshold.
    3. `image_url:string`
       1. Spotify
-   4. `checked_at:utc_datetime_usec`
-   5. `mix phx.gen.live Artists Artist artists name:string path:string image_url:string checked_at:utc_datetime_usec`
+   4. `verified_at:utc_datetime_usec`
+   5. `mix phx.gen.live Artists Artist artists name:string path:string image_url:string verified_at:utc_datetime_usec`
 3. Album
    1. `name:string`
    2. `genre:string`
@@ -102,7 +102,7 @@ Potential action types
    7. `mix phx.gen.live Albums Album albums name:string genre:string year:string release_date:date is_owned:boolean path:string image_url:string artist_id:references:artists`
 4. Settings
    1. `scanned_at:utc_datetime_usec`
-   2. `checked_at:utc_datetime_usec`
+   2. `verified_at:utc_datetime_usec`
    3. Next
       1. `directories`: embedded JSON?
 5. Notifications
@@ -158,7 +158,7 @@ I see in my mind an application that takes the same sidebar as Livebeats as the 
    1. Name
    2. X Albums
    3. Dot Menu
-      1. Check for new albums
+      1. Verify for new albums
    4. Image, uses default if no `image_url` found
    5. Name
    6. 1st Genre * Year
@@ -180,17 +180,17 @@ I see in my mind an application that takes the same sidebar as Livebeats as the 
    2. CRUD buttons
 2. Schedules
    1. Scan
-   2. API Check
+   2. API Verification
 3. Scan
    1. Scan on startup
-4. Check
-   1. Check automatically on new artist
+4. Verify
+   1. Verify automatically on new artist
    2. Retry x times
    3. Exponential backoff - Next
 
 ## Implementation Brainstorm
 
-The UI will need to be able to perform any steps manually, namely the scan and check.
+The UI will need to be able to perform any steps manually, namely the scan and verify.
 
 Scanning should be a named supervised GenServer.
 
@@ -204,17 +204,17 @@ Scanning should be a named supervised GenServer.
 3. scan - Scan module
    1. Build an enumerable of ID3 tags.
    2. For each tag, create album then create each artist.
-   3. When artist is complete, send check artist name event.
+   3. When artist is complete, send verify artist name event.
 
-Check should also be a named GenServer.
+Verify should also be a named GenServer.
 
 1. start message
    1. Run on startup?
-   2. Set `is_checking` conditional to lock and prevent multiple full system checks.
-   3. Run full check algorithm.
-2. check artist name message
+   2. Set `is_verifying` conditional to lock and prevent multiple full system verifications.
+   3. Run full verify algorithm.
+2. verify artist name message
    1. For each album returned, String.jaro_distance to try to match each name in the database.
    2. Add missing album with `is_owned = false`.
    3. Send notification, if within a year it should be a new release otherwise a found.
-3. check - Check module
+3. verify - Verify module
    1. Does Spotify library handle retries? Exponential backoff? Caching? Req does so much and it could potentially be trivial to handle OAuth.
