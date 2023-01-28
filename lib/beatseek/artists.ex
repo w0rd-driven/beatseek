@@ -121,4 +121,19 @@ defmodule Beatseek.Artists do
   def change_artist(%Artist{} = artist, attrs \\ %{}) do
     Artist.changeset(artist, attrs)
   end
+
+  @doc """
+  Returns a count of artists.
+
+  ## Examples
+
+      iex> get_artist_count()
+      0
+
+  """
+  def get_artist_count do
+    Artist
+    |> Repo.aggregate(:count, :id)
+  end
+
 end
