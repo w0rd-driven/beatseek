@@ -4,7 +4,7 @@ defmodule BeatseekWeb.NotificationLive.Index do
   alias Beatseek.Notifications
   alias Beatseek.Notifications.Notification
 
-  @topic "notifications"
+  @topic "notification"
 
   @impl true
   def mount(_params, _session, socket) do
@@ -46,7 +46,7 @@ defmodule BeatseekWeb.NotificationLive.Index do
     notification = Notifications.get_notification!(id)
     {:ok, _} = Notifications.mark_notification_as_seen(notification)
 
-    BeatseekWeb.Endpoint.broadcast!("notifications", "seen", notification)
+    BeatseekWeb.Endpoint.broadcast!(@topic, "seen", notification)
 
     {:noreply, assign(socket, :notifications, list_unseen_notifications())}
   end
