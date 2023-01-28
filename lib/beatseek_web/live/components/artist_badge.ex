@@ -1,11 +1,11 @@
-defmodule BeatseekWeb.Components.NotificationBadge do
+defmodule BeatseekWeb.Components.ArtistBadge do
   use BeatseekWeb, :live_component
 
-  alias Beatseek.Notifications
+  alias Beatseek.Artists
 
   @impl true
   def mount(socket) do
-    count = Notifications.get_unseen_notification_count()
+    count = Artists.get_artist_count()
     {:ok, socket |> assign(count: count)}
   end
 
@@ -24,7 +24,7 @@ defmodule BeatseekWeb.Components.NotificationBadge do
   @impl true
   def render(assigns) do
     ~H"""
-    <span class="flex items-center justify-center text-sm font-black bg-primary-200 text-red-600 rounded-full h-6 px-2 ml-auto">
+    <span class="flex items-center justify-center text-sm font-black bg-primary-200 text-primary-900 rounded-full h-6 px-2 ml-auto">
       <%= @count %>
     </span>
     """
