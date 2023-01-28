@@ -1,14 +1,14 @@
 defmodule BeatseekWeb.SidebarLive do
   use BeatseekWeb, :live_view
 
+  alias BeatseekWeb.Components.ArtistBadge
   alias BeatseekWeb.Components.NotificationBadge
-
-  @topic "notifications"
 
   @impl true
   def mount(_params, session, socket) do
     if connected?(socket) do
-      BeatseekWeb.Endpoint.subscribe(@topic)
+      BeatseekWeb.Endpoint.subscribe("artists")
+      BeatseekWeb.Endpoint.subscribe("notifications")
     end
 
     %{"active_tab" => active_tab, "current_user" => current_user} = session
@@ -45,7 +45,7 @@ defmodule BeatseekWeb.SidebarLive do
       <li class="my-px flex flex-row justify-between">
         <div class="font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</div>
         <button
-          id="artist_menu"
+          id="music_menu"
           type="button"
           class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
           phx-click={}
@@ -68,6 +68,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Artists</span>
+          <.live_component module={ArtistBadge} id="artistBadge" />
         </.link>
       </li>
       <li class="my-px">
@@ -141,7 +142,7 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "new"}, socket) do
+  def handle_info(%{topic: "notification", event: "new"}, socket) do
     send_update(NotificationBadge,
       id: "notificationBadge",
       action: :increment
@@ -151,9 +152,29 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "seen"}, socket) do
+  def handle_info(%{topic: "notification", event: "seen"}, socket) do
     send_update(NotificationBadge,
       id: "notificationBadge",
+      action: :decrement
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{topic: "artist", event: "created"}, socket) do
+    send_update(ArtistBadge,
+      id: "artistBadge",
+      action: :increment
+    )
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{topic: "artist", event: "deleted"}, socket) do
+    send_update(ArtistBadge,
+      id: "artistBadge",
       action: :decrement
     )
 
