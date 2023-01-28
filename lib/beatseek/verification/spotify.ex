@@ -56,7 +56,7 @@ defmodule Beatseek.Verification.Spotify do
 
     case Albums.create_album(params) do
       {:ok, record} ->
-        BeatseekWeb.Endpoint.broadcast!("albums", "new", record)
+        BeatseekWeb.Endpoint.broadcast!("album", "created", record)
         record
 
       {:error, _} ->

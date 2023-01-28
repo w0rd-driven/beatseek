@@ -135,5 +135,4 @@ defmodule Beatseek.Artists do
     Artist
     |> Repo.aggregate(:count, :id)
   end
-
 end
