@@ -1,6 +1,6 @@
 # Beatseek
 
-Summary
+Beatseek uncovers the gaps in your music collection by verifying your local files against the Spotify API.
 
 ## Table of Contents
 
@@ -18,5 +18,7 @@ Summary
     6. [Day 6 :: Tuesday, January 17](diary/day06.md)
     7. [Day 7 :: Wednesday, January 18](diary/day07.md)
     8. [Day 8 :: Thursday, January 19](diary/day08.md)
+    9. [Day 9 :: Thursday, January 20](day09.md)
+    10. [Capstone complete!!](cohort-retrospective.md)
 5. [AI Artwork](artwork/index.md)
     1. I spent the better part of Saturday trying to generate artwork I may use on a landing page. These would look out of place as a 48x48 logo as they're a little too detailed.
