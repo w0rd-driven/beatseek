@@ -171,10 +171,23 @@ defmodule Beatseek.Transformers.AlbumTransformer do
       "(147)" => "Synthpop"
     }
 
-    Map.get(mapping, genre)
+    Map.get(mapping, genre) || genre
   end
 
-  defp get_year(year) do
-    year
+  defp get_year(year) when is_binary(year) do
+    # Formats are currently:
+    # YYYY
+    # YYYY/YYYY
+    # YYYY-MM-DD
+    # YYYY-MM-DDTHH:MM:SS
+    # We leave everything but the last 2
+    regex = ~r/(?<year>\d+)-(?<month>\d+)-(?<day>\d+)/
+    captures = Regex.named_captures(regex, year)
+    do_get_year(captures) || year
   end
+
+  defp get_year(nil), do: nil
+
+  defp do_get_year(%{"day" => _, "month" => _, "year" => year}), do: year
+  defp do_get_year(nil), do: nil
 end
