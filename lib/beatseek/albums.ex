@@ -179,11 +179,15 @@ defmodule Beatseek.Albums do
 
   """
   def get_album_counts do
-    owned = Album
-    |> where([album], album.is_owned)
-    |> Repo.aggregate(:count, :id)
-    total = Album
-    |> Repo.aggregate(:count, :id)
+    owned =
+      Album
+      |> where([album], album.is_owned)
+      |> Repo.aggregate(:count, :id)
+
+    total =
+      Album
+      |> Repo.aggregate(:count, :id)
+
     {owned, total}
   end
 end

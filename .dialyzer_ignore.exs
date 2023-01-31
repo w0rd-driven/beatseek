@@ -7,5 +7,5 @@
 # https://github.com/jeremyjh/dialyxir#elixir-term-format
 [
   {"lib/beatseek/mp3stat.ex", :call, 166},
-  {"lib/beatseek/mp3stat.ex", :guard_fail, 289},
+  {"lib/beatseek/mp3stat.ex", :guard_fail, 289}
 ]
