@@ -1,6 +1,7 @@
 defmodule Beatseek.Verification.Spotify do
   alias Beatseek.Artists
   alias Beatseek.Albums
+  alias Beatseek.Transformers.SpotifyArtistTransformer
   alias Beatseek.Transformers.SpotifyAlbumTransformer
   alias Spotify.Search
 
@@ -16,7 +17,13 @@ defmodule Beatseek.Verification.Spotify do
     {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "artist", market: "US")
     [head | _] = items
     spotify_artist = head
+    update_artist_image(artist, spotify_artist)
     {conn, artist, spotify_artist}
+  end
+
+  def update_artist_image(artist, spotify_attrs) do
+    attrs = spotify_attrs |> SpotifyArtistTransformer.transform()
+    Artists.update_artist(artist, %{image_url: attrs[:image_url]})
   end
 
   def get_albums({conn, artist, spotify_artist}) do
