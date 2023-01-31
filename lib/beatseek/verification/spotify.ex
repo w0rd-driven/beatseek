@@ -15,18 +15,18 @@ defmodule Beatseek.Verification.Spotify do
     artist = Artists.get_artist!(id)
     {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "artist", market: "US")
     [head | _] = items
-    spotify_id = head.id
-    {conn, artist, spotify_id}
+    spotify_artist = head
+    {conn, artist, spotify_artist}
   end
 
-  def get_albums({conn, artist, spotify_id}) do
+  def get_albums({conn, artist, spotify_artist}) do
     {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "album", market: "US")
 
     albums =
       items
       |> Enum.filter(&(&1.album_type == "album"))
       |> Enum.filter(fn album ->
-        album.artists |> Enum.any?(&(&1["id"] == spotify_id))
+        album.artists |> Enum.any?(&(&1["id"] == spotify_artist.id))
       end)
       |> Enum.map(&SpotifyAlbumTransformer.transform/1)
       |> Enum.uniq_by(& &1.name)
@@ -46,7 +46,7 @@ defmodule Beatseek.Verification.Spotify do
   def find_existing(album_params, artist) do
     case Albums.get_artist_album_by_name(album_params.name, artist.id) do
       album ->
-        is_nil(album) || Albums.update_album(album, %{image_url: album_params[:image_url]})
+        is_nil(album) || Albums.update_album(album, %{image_url: album_params[:image_url], year: album_params[:year]})
         {album, album_params, artist}
     end
   end
