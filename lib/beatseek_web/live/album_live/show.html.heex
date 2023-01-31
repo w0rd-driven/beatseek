@@ -1,7 +1,7 @@
 <div class="flex-row">
   <.back navigate={~p"/albums"}></.back>
   <div class="flex pt-14 pl-10">
-    <.album_art url={@album.image_url} is_owned={@album.is_owned} class="flex-col h-48 w-48 bg-neutral-400 rounded-lg" />
+    <.album_art url={@album.image_url} is_owned={@album.is_owned} class="flex-col h-48 w-48 min-w-fit bg-neutral-400 rounded-lg" />
     <h2 class="pl-12 flex-row text-2xl">
       <div class="text-black font-bold"><%= @album.name %></div>
       <.link
