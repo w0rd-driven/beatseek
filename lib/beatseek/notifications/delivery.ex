@@ -1,6 +1,8 @@
 defmodule Beatseek.Notifications.Delivery do
   alias Beatseek.Notifications
 
+  @topic "notification"
+
   def deliver(album) do
     get_attributes_from_album(album)
     |> send_app_notification()
@@ -63,6 +65,6 @@ defmodule Beatseek.Notifications.Delivery do
     # I see why we keep this tied to the web. It's better to alias business logic in the web than the other way around
     #   I'm kind of stuck here though because something would always call into that. I need to send a pubsub event triggered
     #   from this layer. I don't see a way around that.
-    BeatseekWeb.Endpoint.broadcast!("notification", "new", notification)
+    BeatseekWeb.Endpoint.broadcast!(@topic, "new", notification)
   end
 end

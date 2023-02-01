@@ -13,8 +13,8 @@ defmodule BeatseekWeb.Components.AlbumArt do
       <span :if={@is_owned} class="absolute bottom-0.5 right-0.5 text-supporting-teal-400">
         <Heroicons.check_badge solid class="h-6 w-6 fill-current stroke-primary-900" />
       </span>
-      <span :if={!@is_owned} class="absolute bottom-0.5 right-0.5 text-secondary-400">
-        <Heroicons.x_circle solid class="h-6 w-6 fill-current stroke-primary-900" />
+      <span :if={!@is_owned} class="absolute bottom-0.5 right-0.5 text-supporting-yellow-400">
+        <Heroicons.exclamation_triangle solid class="h-6 w-6 fill-current stroke-primary-900" />
       </span>
     </div>
     """
