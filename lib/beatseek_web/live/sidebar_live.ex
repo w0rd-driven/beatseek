@@ -1,9 +1,14 @@
 defmodule BeatseekWeb.SidebarLive do
   use BeatseekWeb, :live_view
 
-  alias BeatseekWeb.Components.ArtistBadge
-  alias BeatseekWeb.Components.AlbumBadge
-  alias BeatseekWeb.Components.NotificationBadge
+  alias Beatseek.Artists
+  import BeatseekWeb.Components.ArtistBadge
+
+  alias Beatseek.Albums
+  import BeatseekWeb.Components.AlbumBadge
+
+  alias Beatseek.Notifications
+  import BeatseekWeb.Components.NotificationBadge
 
   @artist_topic "artist"
   @album_topic "album"
@@ -19,10 +24,18 @@ defmodule BeatseekWeb.SidebarLive do
 
     %{"active_tab" => active_tab, "current_user" => current_user} = session
 
+    artist_count = Artists.get_artist_count()
+    {albums_owned, albums_total} = Albums.get_album_counts()
+    notifications_count = Notifications.get_unseen_notification_count()
+
     socket =
       socket
       |> assign(:active_tab, active_tab)
       |> assign(:current_user, current_user)
+      |> assign(:artist_count, artist_count)
+      |> assign(:albums_owned, albums_owned)
+      |> assign(:albums_total, albums_total)
+      |> assign(:notifications_count, notifications_count)
 
     {:ok, socket, layout: false}
   end
@@ -74,7 +87,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Artists</span>
-          <.live_component module={ArtistBadge} id="artistBadge" />
+          <.artist_badge id="artistBadge" count={@artist_count} />
         </.link>
       </li>
       <li class="my-px">
@@ -89,7 +102,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.rectangle_group solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Albums</span>
-          <.live_component module={AlbumBadge} id="albumBadge" />
+          <.album_badge id="albumBadge" owned={@albums_owned} total={@albums_total} />
         </.link>
       </li>
       <li class="my-px">
@@ -121,7 +134,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.bell_alert solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Notifications</span>
-          <.live_component module={NotificationBadge} id="notificationBadge" />
+          <.notification_badge id="notificationBadge" count={@notifications_count} />
         </.link>
       </li>
       <li :if={!is_nil(@current_user)} class="my-px">
@@ -150,61 +163,31 @@ defmodule BeatseekWeb.SidebarLive do
 
   @impl true
   def handle_info(%{topic: @notification_topic, event: "new"}, socket) do
-    send_update(NotificationBadge,
-      id: "notificationBadge",
-      action: :increment
-    )
-
-    {:noreply, socket}
+    {:noreply, update(socket, :notifications_count, &(&1 + 1))}
   end
 
   @impl true
   def handle_info(%{topic: @notification_topic, event: "seen"}, socket) do
-    send_update(NotificationBadge,
-      id: "notificationBadge",
-      action: :decrement
-    )
-
-    {:noreply, socket}
+    {:noreply, update(socket, :notifications_count, &(&1 - 1))}
   end
 
   @impl true
   def handle_info(%{topic: @artist_topic, event: "created"}, socket) do
-    send_update(ArtistBadge,
-      id: "artistBadge",
-      action: :increment
-    )
-
-    {:noreply, socket}
+    {:noreply, update(socket, :notifications_count, &(&1 + 1))}
   end
 
   @impl true
   def handle_info(%{topic: @artist_topic, event: "deleted"}, socket) do
-    send_update(ArtistBadge,
-      id: "artistBadge",
-      action: :decrement
-    )
-
-    {:noreply, socket}
+    {:noreply, update(socket, :notifications_count, &(&1 - 1))}
   end
 
   @impl true
   def handle_info(%{topic: @album_topic, event: "created"}, socket) do
-    send_update(AlbumBadge,
-      id: "albumBadge",
-      action: :increment
-    )
-
-    {:noreply, socket}
+    {:noreply, update(socket, :albums_total, &(&1 + 1))}
   end
 
   @impl true
   def handle_info(%{topic: @album_topic, event: "deleted"}, socket) do
-    send_update(AlbumBadge,
-      id: "albumBadge",
-      action: :decrement
-    )
-
-    {:noreply, socket}
+    {:noreply, update(socket, :albums_total, &(&1 - 1))}
   end
 end
