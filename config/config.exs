@@ -64,37 +64,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-spotify_scopes =
-  ~w(
-      streaming
-      user-read-playback-position
-      user-read-private
-      user-read-email
-      playlist-modify-public
-      playlist-modify-private
-      playlist-read-public
-      playlist-read-private
-      user-library-read
-      user-library-modify
-      user-top-read
-      playlist-read-collaborative
-      ugc-image-upload
-      user-follow-read
-      user-follow-modify
-      user-read-playback-state
-      user-modify-playback-state
-      user-read-currently-playing
-      user-read-recently-played
-    )
-  |> Enum.join(",")
-
-config :spotify_ex,
-  user_id: System.get_env("SPOTIFY_USER_ID"),
-  callback_url: System.get_env("SPOTIFY_CALLBACK_URL") || "http://localhost:4000/authenticate",
-  client_id: System.get_env("SPOTIFY_CLIENT_ID"),
-  secret_key: System.get_env("SPOTIFY_CLIENT_SECRET"),
-  scopes: [spotify_scopes]
-
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
