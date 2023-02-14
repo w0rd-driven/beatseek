@@ -29,7 +29,7 @@ defmodule BeatseekWeb.UserForgotPasswordLive do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [active_tab: nil]}
   end
 
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do
