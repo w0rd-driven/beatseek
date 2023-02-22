@@ -26,7 +26,7 @@ defmodule Beatseek.NotificationsTest do
         icon: "some icon",
         seen_at: ~U[2023-01-16 08:41:00.000000Z],
         subject: "some subject",
-        type: "some type",
+        type: :album_not_owned,
         url: "some url"
       }
 
@@ -36,7 +36,7 @@ defmodule Beatseek.NotificationsTest do
       assert notification.icon == "some icon"
       assert notification.seen_at == ~U[2023-01-16 08:41:00.000000Z]
       assert notification.subject == "some subject"
-      assert notification.type == "some type"
+      assert notification.type == :album_not_owned
       assert notification.url == "some url"
     end
 
@@ -52,7 +52,7 @@ defmodule Beatseek.NotificationsTest do
         icon: "some updated icon",
         seen_at: ~U[2023-01-17 08:41:00.000000Z],
         subject: "some updated subject",
-        type: "some updated type",
+        type: :album_new_release,
         url: "some updated url"
       }
 
@@ -62,7 +62,7 @@ defmodule Beatseek.NotificationsTest do
       assert notification.icon == "some updated icon"
       assert notification.seen_at == ~U[2023-01-17 08:41:00.000000Z]
       assert notification.subject == "some updated subject"
-      assert notification.type == "some updated type"
+      assert notification.type == :album_new_release
       assert notification.url == "some updated url"
     end
 

@@ -5,7 +5,7 @@ defmodule BeatseekWeb.NotificationLive.Show do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [active_tab: nil]}
   end
 
   @impl true

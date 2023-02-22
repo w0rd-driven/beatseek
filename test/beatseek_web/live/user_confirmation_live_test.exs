@@ -66,8 +66,9 @@ defmodule BeatseekWeb.UserConfirmationLiveTest do
         |> render_submit()
         |> follow_redirect(conn, "/")
 
-      assert {:ok, conn} = result
-      refute Phoenix.Flash.get(conn.assigns.flash, :error)
+      assert {:ok, _conn} = result
+      # TODO: Even though I know this is immediately stale, we should put this back whenever we remove the music to artists redirect
+      # refute Phoenix.Flash.get(conn.assigns.flash, :error)
     end
 
     test "does not confirm email with invalid token", %{conn: conn, user: user} do
