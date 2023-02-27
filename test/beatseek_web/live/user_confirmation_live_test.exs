@@ -67,6 +67,7 @@ defmodule BeatseekWeb.UserConfirmationLiveTest do
         |> follow_redirect(conn, "/")
 
       assert {:ok, _conn} = result
+
       # TODO: Even though I know this is immediately stale, we should put this back whenever we remove the music to artists redirect
       # refute Phoenix.Flash.get(conn.assigns.flash, :error)
     end
