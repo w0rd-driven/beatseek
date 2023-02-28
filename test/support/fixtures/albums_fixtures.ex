@@ -16,7 +16,7 @@ defmodule Beatseek.AlbumsFixtures do
         is_owned: true,
         name: "some name",
         path: "some path",
-        release_date: ~D[2023-01-12],
+        release_date: ~D[2022-01-12],
         year: "some year"
       })
       |> Beatseek.Albums.create_album()
