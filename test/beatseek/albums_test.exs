@@ -1,5 +1,5 @@
 defmodule Beatseek.AlbumsTest do
-  use Beatseek.DataCase
+  use Beatseek.DataCase, async: true
 
   alias Beatseek.Albums
 

@@ -1,5 +1,5 @@
 defmodule BeatseekWeb.UserSettingsLiveTest do
-  use BeatseekWeb.ConnCase
+  use BeatseekWeb.ConnCase, async: true
 
   alias Beatseek.Accounts
   import Phoenix.LiveViewTest
