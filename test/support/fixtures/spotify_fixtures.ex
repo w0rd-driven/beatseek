@@ -5,6 +5,20 @@ defmodule Beatseek.SpotifyFixtures do
   """
 
   @doc """
+  Generate a auth credential.
+  """
+  def spotify_credential_fixture(attrs \\ %{}) do
+    struct!(
+      Spotify.Credentials,
+      Enum.into(attrs, %{
+        access_token:
+          "BQCTYloFMEnBNHs8VQardg4FhBj1i9N977djwdiR3SDmzNeeZG-RGuD92mjfJAu9UMJz9UzNxQEnGQNyT7IENOAbvWtCSfRGMoFtk9CgUhkfpUle-kTL",
+        refresh_token: nil
+      })
+    )
+  end
+
+  @doc """
   Generate an artist.
   """
   def spotify_artist_fixture(attrs \\ %{}) do
