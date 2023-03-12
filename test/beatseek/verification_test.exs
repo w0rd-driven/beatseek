@@ -4,6 +4,7 @@ defmodule Beatseek.VerificationTest do
   alias Beatseek.Transformers.SpotifyAlbumTransformer
 
   import Beatseek.ArtistsFixtures
+  import Beatseek.NotificationsFixtures
   import Beatseek.SpotifyFixtures
 
   defp create_artist(_) do
@@ -28,6 +29,16 @@ defmodule Beatseek.VerificationTest do
     albums = [album]
 
     %{artist: artist, albums: albums}
+  end
+
+  defp create_notification(_attrs \\ %{}) do
+    attrs = %{
+      subject: "Periphery released Periphery V: Djent Is Not A Genre on Friday, March 10, 2023.",
+      type: :album_new_release
+    }
+
+    notification = notification_fixture(attrs)
+    %{notification: notification}
   end
 
   describe "Spotify verify/1" do
@@ -83,7 +94,22 @@ defmodule Beatseek.VerificationTest do
   end
 
   describe "Spotify add_missing_albums/1" do
-    test "add albums that do not exist locally and send a notification for each" do
+    setup [:create_artist]
+
+    test "add albums that do not exist locally and send a notification for each", %{artist: artist} do
+      arguments = Beatseek.Verification.Spotify.get_artist(artist.id)
+      albums = Beatseek.Verification.Spotify.get_albums(arguments)
+      actual_notifications = Beatseek.Verification.Spotify.add_missing_albums(albums)
+
+      %{notification: expected_notification} = create_notification()
+
+      actual_notification =
+        Enum.find(actual_notifications, fn notification ->
+          notification.subject == expected_notification.subject
+        end)
+
+      assert actual_notification.subject == expected_notification.subject
+      assert actual_notification.type == expected_notification.type
     end
   end
 end
