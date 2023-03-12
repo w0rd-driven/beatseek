@@ -1,5 +1,6 @@
 defmodule Beatseek.VerificationTest do
   use Beatseek.DataCase, async: true
+  @moduletag :integration
 
   alias Beatseek.Transformers.SpotifyAlbumTransformer
 
@@ -41,8 +42,24 @@ defmodule Beatseek.VerificationTest do
     %{notification: notification}
   end
 
+  defp assert_notifications(actual_notifications) do
+    %{notification: expected_notification} = create_notification()
+
+    actual_notification =
+      Enum.find(actual_notifications, fn notification ->
+        notification.subject == expected_notification.subject
+      end)
+
+    assert actual_notification.subject == expected_notification.subject
+    assert actual_notification.type == expected_notification.type
+  end
+
   describe "Spotify verify/1" do
-    test "" do
+    setup [:create_artist]
+
+    test "returns the list of notifications sent", %{artist: artist} do
+      actual_notifications = Beatseek.Verification.Spotify.verify(artist.id)
+      assert_notifications(actual_notifications)
     end
   end
 
@@ -100,16 +117,7 @@ defmodule Beatseek.VerificationTest do
       arguments = Beatseek.Verification.Spotify.get_artist(artist.id)
       albums = Beatseek.Verification.Spotify.get_albums(arguments)
       actual_notifications = Beatseek.Verification.Spotify.add_missing_albums(albums)
-
-      %{notification: expected_notification} = create_notification()
-
-      actual_notification =
-        Enum.find(actual_notifications, fn notification ->
-          notification.subject == expected_notification.subject
-        end)
-
-      assert actual_notification.subject == expected_notification.subject
-      assert actual_notification.type == expected_notification.type
+      assert_notifications(actual_notifications)
     end
   end
 end
