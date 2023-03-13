@@ -2,9 +2,6 @@
   Notification <%= @notification.id %>
   <:subtitle>This is a notification record from your database.</:subtitle>
   <:actions>
-    <.link patch={~p"/notifications/#{@notification}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit notification</.button>
-    </.link>
   </:actions>
 </.header>
 
