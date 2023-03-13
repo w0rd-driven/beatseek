@@ -58,11 +58,14 @@ defmodule BeatseekWeb.UserRegistrationLiveTest do
 
       user = user_fixture(%{email: "test@email.com"})
 
-      lv
-      |> form("#registration_form",
-        user: %{"email" => user.email, "password" => "valid_password"}
-      )
-      |> render_submit() =~ "has already been taken"
+      result =
+        lv
+        |> form("#registration_form",
+          user: %{"email" => user.email, "password" => "valid_password"}
+        )
+        |> render_submit()
+
+      assert result =~ "has already been taken"
     end
   end
 
