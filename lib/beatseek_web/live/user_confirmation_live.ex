@@ -25,7 +25,7 @@ defmodule BeatseekWeb.UserConfirmationLive do
   end
 
   def mount(params, _session, socket) do
-    {:ok, assign(socket, token: params["token"]), temporary_assigns: [token: nil]}
+    {:ok, assign(socket, token: params["token"]), temporary_assigns: [active_tab: nil, token: nil]}
   end
 
   # Do not log in the user after confirmation to avoid a

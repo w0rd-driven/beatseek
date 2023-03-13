@@ -1,7 +1,11 @@
 <.table id="artists" rows={@artists} row_click={&JS.navigate(~p"/artists/#{&1}")}>
-  <:col :let={_artist}>
+  <:col :let={artist}>
     <span class="flex items-center justify-center font-bold bg-primary-200 text-gray-100 h-8 w-8 rounded-full ml-auto">
-      <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
+      <%= if is_nil(artist.image_url) do %>
+        <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
+      <% else %>
+        <img src={artist.image_url} class="h-6 w-6" loading="lazy" />
+      <% end %>
     </span>
   </:col>
   <:col :let={artist}><%= artist.name %></:col>

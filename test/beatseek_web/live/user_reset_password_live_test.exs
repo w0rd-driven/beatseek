@@ -1,5 +1,5 @@
 defmodule BeatseekWeb.UserResetPasswordLiveTest do
-  use BeatseekWeb.ConnCase
+  use BeatseekWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import Beatseek.AccountsFixtures
@@ -95,7 +95,7 @@ defmodule BeatseekWeb.UserResetPasswordLiveTest do
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert conn.resp_body =~ "Log in"
+      assert conn.resp_body =~ "Sign in"
     end
 
     test "redirects to password reset page when the Register button is clicked", %{

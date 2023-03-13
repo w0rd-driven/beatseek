@@ -1,22 +1,41 @@
 defmodule BeatseekWeb.SidebarLive do
   use BeatseekWeb, :live_view
 
-  alias BeatseekWeb.Components.NotificationBadge
+  alias Beatseek.Artists
+  import BeatseekWeb.Components.ArtistBadge
 
-  @topic "notifications"
+  alias Beatseek.Albums
+  import BeatseekWeb.Components.AlbumBadge
+
+  alias Beatseek.Notifications
+  import BeatseekWeb.Components.NotificationBadge
+
+  @artist_topic "artist"
+  @album_topic "album"
+  @notification_topic "notification"
 
   @impl true
   def mount(_params, session, socket) do
     if connected?(socket) do
-      BeatseekWeb.Endpoint.subscribe(@topic)
+      BeatseekWeb.Endpoint.subscribe(@artist_topic)
+      BeatseekWeb.Endpoint.subscribe(@album_topic)
+      BeatseekWeb.Endpoint.subscribe(@notification_topic)
     end
 
     %{"active_tab" => active_tab, "current_user" => current_user} = session
+
+    artist_count = Artists.get_artist_count()
+    {albums_owned, albums_total} = Albums.get_album_counts()
+    notifications_count = Notifications.get_unseen_notification_count()
 
     socket =
       socket
       |> assign(:active_tab, active_tab)
       |> assign(:current_user, current_user)
+      |> assign(:artist_count, artist_count)
+      |> assign(:albums_owned, albums_owned)
+      |> assign(:albums_total, albums_total)
+      |> assign(:notifications_count, notifications_count)
 
     {:ok, socket, layout: false}
   end
@@ -45,7 +64,7 @@ defmodule BeatseekWeb.SidebarLive do
       <li class="my-px flex flex-row justify-between">
         <div class="font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</div>
         <button
-          id="artist_menu"
+          id="music_menu"
           type="button"
           class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
           phx-click={}
@@ -68,6 +87,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Artists</span>
+          <.artist_badge id="artistBadge" count={@artist_count} />
         </.link>
       </li>
       <li class="my-px">
@@ -82,6 +102,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.rectangle_group solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Albums</span>
+          <.album_badge id="albumBadge" owned={@albums_owned} total={@albums_total} />
         </.link>
       </li>
       <li class="my-px">
@@ -113,7 +134,7 @@ defmodule BeatseekWeb.SidebarLive do
             <Heroicons.bell_alert solid class="h-6 w-6 stroke-current" />
           </span>
           <span class="ml-3 font-bold">Notifications</span>
-          <.live_component module={NotificationBadge} id="notificationBadge" />
+          <.notification_badge id="notificationBadge" count={@notifications_count} />
         </.link>
       </li>
       <li :if={!is_nil(@current_user)} class="my-px">
@@ -141,22 +162,32 @@ defmodule BeatseekWeb.SidebarLive do
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "new"}, socket) do
-    send_update(NotificationBadge,
-      id: "notificationBadge",
-      action: :increment
-    )
-
-    {:noreply, socket}
+  def handle_info(%{topic: @notification_topic, event: "new"}, socket) do
+    {:noreply, update(socket, :notifications_count, &(&1 + 1))}
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "seen"}, socket) do
-    send_update(NotificationBadge,
-      id: "notificationBadge",
-      action: :decrement
-    )
+  def handle_info(%{topic: @notification_topic, event: "seen"}, socket) do
+    {:noreply, update(socket, :notifications_count, &(&1 - 1))}
+  end
 
-    {:noreply, socket}
+  @impl true
+  def handle_info(%{topic: @artist_topic, event: "created"}, socket) do
+    {:noreply, update(socket, :notifications_count, &(&1 + 1))}
+  end
+
+  @impl true
+  def handle_info(%{topic: @artist_topic, event: "deleted"}, socket) do
+    {:noreply, update(socket, :notifications_count, &(&1 - 1))}
+  end
+
+  @impl true
+  def handle_info(%{topic: @album_topic, event: "created"}, socket) do
+    {:noreply, update(socket, :albums_total, &(&1 + 1))}
+  end
+
+  @impl true
+  def handle_info(%{topic: @album_topic, event: "deleted"}, socket) do
+    {:noreply, update(socket, :albums_total, &(&1 - 1))}
   end
 end

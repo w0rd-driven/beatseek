@@ -4,7 +4,7 @@ defmodule BeatseekWeb.NotificationLive.Index do
   alias Beatseek.Notifications
   alias Beatseek.Notifications.Notification
 
-  @topic "notifications"
+  @topic "notification"
 
   @impl true
   def mount(_params, _session, socket) do
@@ -46,19 +46,18 @@ defmodule BeatseekWeb.NotificationLive.Index do
     notification = Notifications.get_notification!(id)
     {:ok, _} = Notifications.mark_notification_as_seen(notification)
 
-    BeatseekWeb.Endpoint.broadcast!("notifications", "seen", notification)
+    BeatseekWeb.Endpoint.broadcast!(@topic, "seen", notification)
 
-    {:noreply, assign(socket, :notifications, list_unseen_notifications())}
+    {:noreply, update(socket, :notifications, fn notifications -> notifications -- [notification] end)}
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "new", payload: payload} = _message, socket) do
-    notifications = [payload | socket.assigns.notifications]
-    {:noreply, assign(socket, :notifications, notifications)}
+  def handle_info(%{topic: @topic, event: "new", payload: notification} = _message, socket) do
+    {:noreply, update(socket, :notifications, fn notifications -> [notification | notifications] end)}
   end
 
   @impl true
-  def handle_info(%{topic: @topic, event: "seen"} = _message, socket) do
+  def handle_info(%{topic: @topic, event: "seen", payload: _notification} = _message, socket) do
     {:noreply, socket}
   end
 

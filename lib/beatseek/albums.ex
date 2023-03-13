@@ -168,4 +168,26 @@ defmodule Beatseek.Albums do
   def change_album(%Album{} = album, attrs \\ %{}) do
     Album.changeset(album, attrs)
   end
+
+  @doc """
+  Returns a count of owned vs total albums.
+
+  ## Examples
+
+      iex> get_album_counts()
+      {0, 0}
+
+  """
+  def get_album_counts do
+    owned =
+      Album
+      |> where([album], album.is_owned)
+      |> Repo.aggregate(:count, :id)
+
+    total =
+      Album
+      |> Repo.aggregate(:count, :id)
+
+    {owned, total}
+  end
 end

@@ -1,5 +1,5 @@
 defmodule Beatseek.Transformers.ArtistTransformer do
-  def transform(id3) do
+  def transform(%Beatseek.MP3Stat{} = id3) do
     %{
       name: get_name(id3.artist),
       path: get_path(id3.path, id3.artist)

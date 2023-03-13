@@ -1,22 +1,42 @@
-<article id="notifications" class="group flex-row w-full h-screen">
+<article id="notifications" class="group flex-row w-full lg:w-[80ch]">
   <figure
     :for={notification <- @notifications}
     id={"notification-#{notification.id}"}
-    class="px-4 mt-4 py-4 rounded-lg text-primary-600 bg-supporting-yellow-400 hover:bg-primary-200"
+    class="px-4 mt-4 py-4 rounded-lg text-primary-600 bg-supporting-yellow-400 hover:bg-primary-200 flex flex-row justify-between"
   >
-    <div class="flex flex-row justify-between">
+    <div>
       <figcaption class="font-bold text-sm"><%= notification.subject %></figcaption>
+      <div class="flex flex-row text-neutral-400 font-black uppercase text-xs">
+        <Heroicons.exclamation_triangle
+          :if={notification.type == :album_not_owned}
+          solid
+          class="h-6 w-6 fill-current stroke-primary-900"
+        />
+        <div :if={notification.type == :album_not_owned} class="text-neutral-600 my-auto ml-1">Older Release</div>
+        <Heroicons.exclamation_triangle
+          :if={notification.type == :album_new_release}
+          solid
+          class="h-6 w-6 fill-current stroke-primary-900"
+        />
+        <div :if={notification.type == :album_new_release} class="text-neutral-600 my-auto ml-1">New Release</div>
+        <Heroicons.exclamation_triangle
+          :if={notification.type == :album_upcoming_release}
+          solid
+          class="h-6 w-6 fill-current stroke-primary-900"
+        />
+        <div :if={notification.type == :album_upcoming_release} class="text-neutral-600 my-auto ml-1">
+          Upcoming Release
+        </div>
+      </div>
+    </div>
+    <div class="my-auto">
       <.link
         :if={is_nil(notification.seen_at)}
-        class="text-secondary-400 my-auto ml-2"
+        class="text-secondary-400"
         phx-click={JS.push("delete", value: %{id: notification.id})}
       >
-        <Heroicons.x_circle solid class="h-6 w-6 fill-current stroke-primary-900" />
+        <Heroicons.x_circle solid class="h-8 w-8 fill-current stroke-primary-900" />
       </.link>
-    </div>
-    <div :if={!is_nil(notification.body)}><%= notification.body %></div>
-    <div :if={!is_nil(notification.seen_at)} class="text-gray-500 text-sm font-medium">
-      <%= notification.seen_at %>
     </div>
   </figure>
 </article>

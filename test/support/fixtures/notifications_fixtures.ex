@@ -13,9 +13,8 @@ defmodule Beatseek.NotificationsFixtures do
       |> Enum.into(%{
         body: "some body",
         icon: "some icon",
-        seen_at: ~U[2023-01-16 08:41:00.000000Z],
         subject: "some subject",
-        type: "some type",
+        type: :album_not_owned,
         url: "some url"
       })
       |> Beatseek.Notifications.create_notification()

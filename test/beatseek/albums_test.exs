@@ -1,11 +1,12 @@
 defmodule Beatseek.AlbumsTest do
-  use Beatseek.DataCase
+  use Beatseek.DataCase, async: true
 
   alias Beatseek.Albums
 
   describe "albums" do
     alias Beatseek.Albums.Album
 
+    import Beatseek.ArtistsFixtures
     import Beatseek.AlbumsFixtures
 
     @invalid_attrs %{
@@ -19,12 +20,14 @@ defmodule Beatseek.AlbumsTest do
     }
 
     test "list_albums/0 returns all albums" do
-      album = album_fixture()
+      artist = artist_fixture()
+      album = album_fixture(artist_id: artist.id) |> Repo.preload(:artist)
       assert Albums.list_albums() == [album]
     end
 
     test "get_album!/1 returns the album with given id" do
-      album = album_fixture()
+      artist = artist_fixture()
+      album = album_fixture(artist_id: artist.id) |> Repo.preload(:artist)
       assert Albums.get_album!(album.id) == album
     end
 
@@ -77,7 +80,8 @@ defmodule Beatseek.AlbumsTest do
     end
 
     test "update_album/2 with invalid data returns error changeset" do
-      album = album_fixture()
+      artist = artist_fixture()
+      album = album_fixture(artist_id: artist.id) |> Repo.preload(:artist)
       assert {:error, %Ecto.Changeset{}} = Albums.update_album(album, @invalid_attrs)
       assert album == Albums.get_album!(album.id)
     end
