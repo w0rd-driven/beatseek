@@ -1,5 +1,5 @@
 defmodule Beatseek.Transformers.AlbumTransformer do
-  def transform(id3, is_owned \\ true) do
+  def transform(%Beatseek.MP3Stat{} = id3, is_owned \\ true) do
     %{
       name: id3.album,
       genre: get_genre(id3.genre),

@@ -21,7 +21,7 @@ defmodule Beatseek.Verification.Spotify do
     {conn, artist, spotify_artist}
   end
 
-  def update_artist_image(artist, spotify_attrs) do
+  defp update_artist_image(artist, spotify_attrs) do
     attrs = spotify_attrs |> SpotifyArtistTransformer.transform()
     Artists.update_artist(artist, %{image_url: attrs[:image_url]})
   end
@@ -50,7 +50,7 @@ defmodule Beatseek.Verification.Spotify do
     end)
   end
 
-  def find_existing(album_params, artist) do
+  defp find_existing(album_params, artist) do
     case Albums.get_artist_album_by_name(album_params.name, artist.id) do
       album ->
         is_nil(album) || Albums.update_album(album, %{image_url: album_params[:image_url], year: album_params[:year]})
@@ -58,7 +58,7 @@ defmodule Beatseek.Verification.Spotify do
     end
   end
 
-  def create_if_missing({album, params, artist}) when is_nil(album) do
+  defp create_if_missing({album, params, artist}) when is_nil(album) do
     params = params |> Map.put(:artist_id, artist.id)
 
     case Albums.create_album(params) do
@@ -71,15 +71,15 @@ defmodule Beatseek.Verification.Spotify do
     end
   end
 
-  def create_if_missing({_album, _params, _artist}), do: nil
+  defp create_if_missing({_album, _params, _artist}), do: nil
 
-  def send_notification(album) when is_nil(album), do: :ok
+  defp send_notification(album) when is_nil(album), do: :ok
 
-  def send_notification(album) do
+  defp send_notification(album) do
     Beatseek.Notifications.Delivery.deliver(album)
   end
 
-  def authenticate(params \\ %{grant_type: "client_credentials"}) do
+  defp authenticate(params \\ %{grant_type: "client_credentials"}) do
     with {:ok, response} <- Spotify.AuthRequest.post(URI.encode_query(params)) do
       parsed_response = response.body |> Jason.decode!()
       Spotify.Credentials.get_tokens_from_response(parsed_response)

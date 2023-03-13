@@ -1,5 +1,5 @@
 defmodule BeatseekWeb.UserLoginLiveTest do
-  use BeatseekWeb.ConnCase
+  use BeatseekWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import Beatseek.AccountsFixtures
@@ -8,8 +8,7 @@ defmodule BeatseekWeb.UserLoginLiveTest do
     test "renders log in page", %{conn: conn} do
       {:ok, _lv, html} = live(conn, ~p"/users/log_in")
 
-      assert html =~ "Log in"
-      assert html =~ "Register"
+      assert html =~ "Sign in"
       assert html =~ "Forgot your password?"
     end
 

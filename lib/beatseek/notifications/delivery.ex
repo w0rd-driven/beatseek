@@ -66,5 +66,6 @@ defmodule Beatseek.Notifications.Delivery do
     #   I'm kind of stuck here though because something would always call into that. I need to send a pubsub event triggered
     #   from this layer. I don't see a way around that.
     BeatseekWeb.Endpoint.broadcast!(@topic, "new", notification)
+    notification
   end
 end
