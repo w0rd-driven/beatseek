@@ -45,5 +45,5 @@ jobs:
         run: mix ecto.migrate
         if: false
 
-      # - name: Run Tests
-      #   run: mix test --include integration
+      - name: Run Tests
+        run: mix test --include integration

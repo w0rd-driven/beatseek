@@ -118,7 +118,7 @@ defmodule Beatseek.Notifications do
   end
 
   @doc """
-  Returns a count notifications not seen yet.
+  Returns a count of notifications not seen yet.
 
   ## Examples
 

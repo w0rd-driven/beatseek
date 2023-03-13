@@ -1,6 +1,7 @@
 defmodule Beatseek.Verification.Spotify do
   alias Beatseek.Artists
   alias Beatseek.Albums
+  alias Beatseek.Transformers.SpotifyArtistTransformer
   alias Beatseek.Transformers.SpotifyAlbumTransformer
   alias Spotify.Search
 
@@ -15,18 +16,24 @@ defmodule Beatseek.Verification.Spotify do
     artist = Artists.get_artist!(id)
     {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "artist", market: "US")
     [head | _] = items
-    spotify_id = head.id
-    {conn, artist, spotify_id}
+    spotify_artist = head
+    update_artist_image(artist, spotify_artist)
+    {conn, artist, spotify_artist}
   end
 
-  def get_albums({conn, artist, spotify_id}) do
+  defp update_artist_image(artist, spotify_attrs) do
+    attrs = spotify_attrs |> SpotifyArtistTransformer.transform()
+    Artists.update_artist(artist, %{image_url: attrs[:image_url]})
+  end
+
+  def get_albums({conn, artist, spotify_artist}) do
     {:ok, %{items: items}} = Search.query(conn, q: artist.name, type: "album", market: "US")
 
     albums =
       items
       |> Enum.filter(&(&1.album_type == "album"))
       |> Enum.filter(fn album ->
-        album.artists |> Enum.any?(&(&1["id"] == spotify_id))
+        album.artists |> Enum.any?(&(&1["id"] == spotify_artist.id))
       end)
       |> Enum.map(&SpotifyAlbumTransformer.transform/1)
       |> Enum.uniq_by(& &1.name)
@@ -43,20 +50,20 @@ defmodule Beatseek.Verification.Spotify do
     end)
   end
 
-  def find_existing(album_params, artist) do
+  defp find_existing(album_params, artist) do
     case Albums.get_artist_album_by_name(album_params.name, artist.id) do
       album ->
-        is_nil(album) || Albums.update_album(album, %{image_url: album_params[:image_url]})
+        is_nil(album) || Albums.update_album(album, %{image_url: album_params[:image_url], year: album_params[:year]})
         {album, album_params, artist}
     end
   end
 
-  def create_if_missing({album, params, artist}) when is_nil(album) do
+  defp create_if_missing({album, params, artist}) when is_nil(album) do
     params = params |> Map.put(:artist_id, artist.id)
 
     case Albums.create_album(params) do
       {:ok, record} ->
-        BeatseekWeb.Endpoint.broadcast!("albums", "new", record)
+        BeatseekWeb.Endpoint.broadcast!("album", "created", record)
         record
 
       {:error, _} ->
@@ -64,15 +71,15 @@ defmodule Beatseek.Verification.Spotify do
     end
   end
 
-  def create_if_missing({_album, _params, _artist}), do: nil
+  defp create_if_missing({_album, _params, _artist}), do: nil
 
-  def send_notification(album) when is_nil(album), do: :ok
+  defp send_notification(album) when is_nil(album), do: :ok
 
-  def send_notification(album) do
+  defp send_notification(album) do
     Beatseek.Notifications.Delivery.deliver(album)
   end
 
-  def authenticate(params \\ %{grant_type: "client_credentials"}) do
+  defp authenticate(params \\ %{grant_type: "client_credentials"}) do
     with {:ok, response} <- Spotify.AuthRequest.post(URI.encode_query(params)) do
       parsed_response = response.body |> Jason.decode!()
       Spotify.Credentials.get_tokens_from_response(parsed_response)
