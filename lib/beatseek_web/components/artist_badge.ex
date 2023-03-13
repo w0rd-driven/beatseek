@@ -2,8 +2,7 @@ defmodule BeatseekWeb.Components.ArtistBadge do
   use Phoenix.Component
 
   attr :id, :string
-  attr :owned, :integer, default: 0
-  attr :total, :integer, default: 0
+  attr :count, :integer, default: 0
 
   def artist_badge(assigns) do
     ~H"""

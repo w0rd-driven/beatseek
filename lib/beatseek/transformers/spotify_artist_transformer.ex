@@ -1,5 +1,5 @@
 defmodule Beatseek.Transformers.SpotifyArtistTransformer do
-  def transform(artist) do
+  def transform(%Spotify.Artist{} = artist) do
     %{
       image_url: get_image(artist.images)
     }

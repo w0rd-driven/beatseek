@@ -41,7 +41,7 @@ defmodule BeatseekWeb.UserResetPasswordLive do
           socket
       end
 
-    {:ok, socket, temporary_assigns: [changeset: nil]}
+    {:ok, socket, temporary_assigns: [active_tab: nil, changeset: nil]}
   end
 
   # Do not log in the user after reset password to avoid a

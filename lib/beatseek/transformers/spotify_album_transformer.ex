@@ -1,5 +1,5 @@
 defmodule Beatseek.Transformers.SpotifyAlbumTransformer do
-  def transform(album) do
+  def transform(%Spotify.Album{} = album) do
     %{
       name: album.name,
       release_date: album.release_date,

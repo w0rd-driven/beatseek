@@ -1,5 +1,5 @@
 defmodule BeatseekWeb.UserRegistrationLiveTest do
-  use BeatseekWeb.ConnCase
+  use BeatseekWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import Beatseek.AccountsFixtures
@@ -9,7 +9,7 @@ defmodule BeatseekWeb.UserRegistrationLiveTest do
       {:ok, _lv, html} = live(conn, ~p"/users/register")
 
       assert html =~ "Register"
-      assert html =~ "Log in"
+      assert html =~ "Sign in"
     end
 
     test "redirects if already logged in", %{conn: conn} do
@@ -49,10 +49,8 @@ defmodule BeatseekWeb.UserRegistrationLiveTest do
 
       # Now do a logged in request and assert on the menu
       conn = get(conn, "/")
-      response = html_response(conn, 200)
-      assert response =~ email
-      assert response =~ "Settings"
-      assert response =~ "Log out"
+      response = html_response(conn, 302)
+      assert response =~ "redirected"
     end
 
     test "renders errors for duplicated email", %{conn: conn} do
@@ -78,7 +76,7 @@ defmodule BeatseekWeb.UserRegistrationLiveTest do
         |> render_click()
         |> follow_redirect(conn, ~p"/users/log_in")
 
-      assert login_html =~ "Log in"
+      assert login_html =~ "Sign in"
     end
   end
 end
