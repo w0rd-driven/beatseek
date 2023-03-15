@@ -4,45 +4,14 @@
     <header class="sticky top-0 w-full bg-neutral-200 divide-y-2 pt-2 pb-2 z-50">
       <div class="flex flex-row justify-between items-end">
         <h2 class="text-3xl font-bold"><%= @artist.name %></h2>
-        <div class="relative inline-block text-left">
-          <button
-            id="artist-menu"
-            type="button"
-            class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
-            phx-click={show_dropdown("#artist-menu-dropdown")}
-            phx-hook="Menu"
-            data-active-class="bg-gray-100"
-            aria-haspopup="true"
-          >
-            <span class="sr-only">Open artist menu</span>
-            <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
-          </button>
-          <div
-            id="artist-menu-dropdown"
-            phx-click-away={hide_dropdown("#artist-menu-dropdown")}
-            class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="artist-menu"
-            tabindex="-1"
-          >
-            <div class="py-1" role="none">
-              <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-              <.link
-                class="text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-gray-100"
-                role="menuitem"
-                tabindex="-1"
-                id="menu-item-0"
-                phx-click={hide_dropdown("#artist-menu-dropdown") |> JS.push("verify", value: %{id: @artist.id})}
-              >
-                <Heroicons.arrow_down_on_square_stack
-                  solid
-                  class="mr-2 h-6 w-6 stroke-current text-gray-400 group-hover:text-gray-500"
-                /> Verify artist
-              </.link>
-            </div>
-          </div>
-        </div>
+        <.dropdown id="artist-menu" name="artist">
+          <:link phx-click={hide_dropdown("#artist-menu-dropdown") |> JS.push("verify", value: %{id: @artist.id})}>
+            <Heroicons.arrow_down_on_square_stack
+              solid
+              class="mr-2 h-6 w-6 stroke-current text-gray-400 group-hover:text-gray-500"
+            /> Verify artist
+          </:link>
+        </.dropdown>
       </div>
       <div class="text-gray-600 text-sm uppercase font-bold"><%= @album_count %> albums</div>
     </header>
