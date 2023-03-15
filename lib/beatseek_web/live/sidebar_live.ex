@@ -63,17 +63,59 @@ defmodule BeatseekWeb.SidebarLive do
       </li>
       <li class="my-px flex flex-row justify-between">
         <div class="font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</div>
-        <button
-          id="music_menu"
-          type="button"
-          class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
-          phx-click={}
-          phx-hook="MusicMenu"
-          data-active-class="bg-gray-100"
-          aria-haspopup="true"
-        >
-          <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
-        </button>
+        <div class="relative inline-block text-left">
+          <button
+            id="music-menu"
+            type="button"
+            class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
+            phx-click={show_dropdown("#music-menu-dropdown")}
+            phx-hook="Menu"
+            data-active-class="bg-gray-100"
+            aria-haspopup="true"
+          >
+            <span class="sr-only">Open music menu</span>
+            <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
+          </button>
+          <div
+            id="music-menu-dropdown"
+            phx-click-away={hide_dropdown("#music-menu-dropdown")}
+            class="hidden absolute right-0 z-10 mt-2 w-48 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="music-menu"
+            tabindex="-1"
+          >
+            <div class="py-1" role="none">
+              <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+              <.link
+                class="text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                id="menu-item-0"
+                phx-click={hide_dropdown("#music-menu-dropdown") |> JS.push("scan", value: %{command: "start"})}
+              >
+                <Heroicons.arrow_path_rounded_square
+                  solid
+                  class="mr-2 h-6 w-6 stroke-current text-gray-400 group-hover:text-gray-500"
+                /> Scan collection
+              </.link>
+            </div>
+            <div class="py-1" role="none">
+              <.link
+                class="text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-gray-100"
+                role="menuitem"
+                tabindex="-1"
+                id="menu-item-1"
+                phx-click={hide_dropdown("#music-menu-dropdown") |> JS.push("verify", value: %{command: "start"})}
+              >
+                <Heroicons.arrow_down_on_square_stack
+                  solid
+                  class="mr-2 h-6 w-6 stroke-current text-gray-400 group-hover:text-gray-500"
+                /> Verify all artists
+              </.link>
+            </div>
+          </div>
+        </div>
       </li>
       <li class="my-px">
         <.link
@@ -159,6 +201,37 @@ defmodule BeatseekWeb.SidebarLive do
       </li>
     </ul>
     """
+  end
+
+  def show_dropdown(to) do
+    JS.show(
+      to: to,
+      transition:
+        {"transition ease-out duration-120", "transform opacity-0 scale-95", "transform opacity-100 scale-100"}
+    )
+    |> JS.set_attribute({"aria-expanded", "true"}, to: to)
+  end
+
+  def hide_dropdown(to) do
+    JS.hide(
+      to: to,
+      transition: {"transition ease-in duration-120", "transform opacity-100 scale-100", "transform opacity-0 scale-95"}
+    )
+    |> JS.remove_attribute("aria-expanded", to: to)
+  end
+
+  @impl true
+  def handle_event("scan", _unsigned_params, socket) do
+    Beatseek.Scanner.scan()
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("verify", _unsigned_params, socket) do
+    Beatseek.Artists.reset_verified()
+    next_id = Beatseek.Artists.get_next_backfill_id()
+    Beatseek.Workers.VerificationWorker.new(%{id: next_id, backfill: true}) |> Oban.insert!()
+    {:noreply, socket}
   end
 
   @impl true
