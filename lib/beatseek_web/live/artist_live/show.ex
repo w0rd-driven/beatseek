@@ -30,9 +30,9 @@ defmodule BeatseekWeb.ArtistLive.Show do
   @impl true
   def handle_event("verify", %{"id" => id}, socket) do
     artist = Artists.get_artist!(id)
-    attrs = %{verified_at: nil}
-    {:ok, _} = Beatseek.Artists.update_artist(artist, attrs)
-    Beatseek.Workers.VerificationWorker.new(%{id: id, backfill: true}) |> Oban.insert!()
+    {:ok, _} = Beatseek.Artists.update_artist(artist, %{verified_at: nil})
+    Beatseek.Verification.Spotify.verify(id)
+    {:ok, _} = Artists.update_artist(artist, %{verified_at: DateTime.utc_now()})
     {:noreply, socket}
   end
 
