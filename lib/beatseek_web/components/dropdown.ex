@@ -4,9 +4,6 @@ defmodule BeatseekWeb.Components.Dropdown do
   attr :id, :string, required: true
   attr :name, :string
 
-  slot :title
-  slot :subtitle
-
   slot :link do
     attr :navigate, :string
     attr :href, :string
@@ -20,7 +17,7 @@ defmodule BeatseekWeb.Components.Dropdown do
       <button
         id={@id}
         type="button"
-        class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
+        class="group bg-neutral-300 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
         phx-click={show_dropdown("##{@id}-dropdown")}
         phx-hook="Menu"
         data-active-class="bg-gray-100"
@@ -44,7 +41,7 @@ defmodule BeatseekWeb.Components.Dropdown do
             <.link
               tabindex="-1"
               role="menuitem"
-              class="block group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-purple-500"
+              class="block group flex items-center px-4 py-2 text-sm font-bold text-primary-900 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary-200 focus:ring-primary-600"
               {link}
             >
               <%= render_slot(link) %>

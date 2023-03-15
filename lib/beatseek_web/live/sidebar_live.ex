@@ -69,13 +69,13 @@ defmodule BeatseekWeb.SidebarLive do
           <:link phx-click={hide_dropdown("#music-menu-dropdown") |> JS.push("scan", value: %{"command" => "start"})}>
             <Heroicons.arrow_path_rounded_square
               solid
-              class="mr-2 h-6 w-6 stroke-current text-gray-400 group-hover:text-gray-500"
+              class="mr-2 h-6 w-6 stroke-current text-primary-400 group-hover:text-primary-700"
             /> Scan collection
           </:link>
           <:link phx-click={hide_dropdown("#music-menu-dropdown") |> JS.push("verify_all", value: %{"command" => "start"})}>
             <Heroicons.arrow_down_on_square_stack
               solid
-              class="mr-2 h-6 w-6 stroke-current text-gray-400 group-hover:text-gray-500"
+              class="mr-2 h-6 w-6 stroke-current text-primary-400 group-hover:text-primary-700"
             /> Verify all artists
           </:link>
         </.dropdown>
