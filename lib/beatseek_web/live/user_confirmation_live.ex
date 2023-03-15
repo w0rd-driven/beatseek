@@ -8,24 +8,23 @@ defmodule BeatseekWeb.UserConfirmationLive do
     <div class="mx-auto max-w-sm">
       <.header class="text-center">Confirm Account</.header>
 
-      <.simple_form :let={f} for={:user} id="confirmation_form" phx-submit="confirm_account">
-        <.input field={{f, :token}} type="hidden" value={@token} />
+      <.simple_form for={@form} id="confirmation_form" phx-submit="confirm_account">
+        <.input field={@form[:token]} type="hidden" />
         <:actions>
           <.button phx-disable-with="Confirming..." class="w-full">Confirm my account</.button>
         </:actions>
       </.simple_form>
 
       <p class="text-center mt-4">
-        <.link href={~p"/users/register"}>Register</.link>
-        |
-        <.link href={~p"/users/log_in"}>Log in</.link>
+        <.link href={~p"/users/register"}>Register</.link> | <.link href={~p"/users/log_in"}>Log in</.link>
       </p>
     </div>
     """
   end
 
-  def mount(params, _session, socket) do
-    {:ok, assign(socket, token: params["token"]), temporary_assigns: [active_tab: nil, token: nil]}
+  def mount(%{"token" => token}, _session, socket) do
+    form = to_form(%{"token" => token}, as: "user")
+    {:ok, assign(socket, form: form), temporary_assigns: [active_tab: nil, form: nil]}
   end
 
   # Do not log in the user after confirmation to avoid a

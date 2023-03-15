@@ -9,6 +9,7 @@ defmodule BeatseekWeb.UserLoginLiveTest do
       {:ok, _lv, html} = live(conn, ~p"/users/log_in")
 
       assert html =~ "Sign in"
+      assert html =~ "Sign up"
       assert html =~ "Forgot your password?"
     end
 
@@ -58,7 +59,7 @@ defmodule BeatseekWeb.UserLoginLiveTest do
 
       {:ok, _login_live, login_html} =
         lv
-        |> element(~s|a:fl-contains("Sign up")|)
+        |> element(~s|main a:fl-contains("Sign up")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/register")
 
@@ -72,7 +73,7 @@ defmodule BeatseekWeb.UserLoginLiveTest do
 
       {:ok, conn} =
         lv
-        |> element(~s{a:fl-contains('Forgot your password?')})
+        |> element(~s|main a:fl-contains("Forgot your password?")|)
         |> render_click()
         |> follow_redirect(conn, ~p"/users/reset_password")
 
