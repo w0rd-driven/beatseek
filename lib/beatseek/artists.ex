@@ -131,8 +131,41 @@ defmodule Beatseek.Artists do
       0
 
   """
-  def get_artist_count do
+  def get_artist_count() do
     Artist
     |> Repo.aggregate(:count, :id)
+  end
+
+  @doc """
+  Returns the next id to backfill.
+
+  ## Examples
+
+      iex> get_next_backfill_id()
+      1
+
+  """
+  def get_next_backfill_id(current_id \\ 0) do
+    Artist
+    |> where([artist], is_nil(artist.verified_at))
+    |> where([artist], artist.id > ^current_id)
+    |> order_by(asc: :id)
+    |> limit(1)
+    |> select([artist], artist.id)
+    |> Repo.one()
+  end
+
+  @doc """
+  Updates all artist `verified_at` columns to `NULL` to reset the backfill process.
+
+  ## Examples
+
+      iex> reset_verified()
+      1
+
+  """
+  def reset_verified() do
+    Artist
+    |> Repo.update_all(set: [verified_at: nil])
   end
 end
