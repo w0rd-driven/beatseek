@@ -10,6 +10,8 @@ defmodule BeatseekWeb.SidebarLive do
   alias Beatseek.Notifications
   import BeatseekWeb.Components.NotificationBadge
 
+  import BeatseekWeb.Components.Dropdown
+
   @artist_topic "artist"
   @album_topic "album"
   @notification_topic "notification"
@@ -63,17 +65,20 @@ defmodule BeatseekWeb.SidebarLive do
       </li>
       <li class="my-px flex flex-row justify-between">
         <div class="font-bold text-md text-primary-900 px-4 mt-8 mb-4 uppercase">Music</div>
-        <button
-          id="music_menu"
-          type="button"
-          class="group bg-neutral-400 rounded-full px-0.5 py-0.5 my-auto mt-8 text-sm text-center font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
-          phx-click={}
-          phx-hook="MusicMenu"
-          data-active-class="bg-gray-100"
-          aria-haspopup="true"
-        >
-          <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
-        </button>
+        <.dropdown id="music-menu" name="music">
+          <:link phx-click={hide_dropdown("#music-menu-dropdown") |> JS.push("scan", value: %{"command" => "start"})}>
+            <Heroicons.arrow_path_rounded_square
+              solid
+              class="mr-2 h-6 w-6 stroke-current text-primary-400 group-hover:text-primary-700"
+            /> Scan collection
+          </:link>
+          <:link phx-click={hide_dropdown("#music-menu-dropdown") |> JS.push("verify_all", value: %{"command" => "start"})}>
+            <Heroicons.arrow_down_on_square_stack
+              solid
+              class="mr-2 h-6 w-6 stroke-current text-primary-400 group-hover:text-primary-700"
+            /> Verify all artists
+          </:link>
+        </.dropdown>
       </li>
       <li class="my-px">
         <.link
@@ -159,6 +164,20 @@ defmodule BeatseekWeb.SidebarLive do
       </li>
     </ul>
     """
+  end
+
+  @impl true
+  def handle_event("scan", %{"command" => "start"}, socket) do
+    Beatseek.Scanner.scan()
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("verify_all", %{"command" => "start"}, socket) do
+    Beatseek.Artists.reset_verified()
+    next_id = Beatseek.Artists.get_next_backfill_id()
+    Beatseek.Workers.VerificationWorker.new(%{id: next_id, backfill: true}) |> Oban.insert!()
+    {:noreply, socket}
   end
 
   @impl true

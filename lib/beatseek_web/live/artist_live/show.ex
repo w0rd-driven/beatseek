@@ -4,6 +4,7 @@ defmodule BeatseekWeb.ArtistLive.Show do
   alias Beatseek.Artists
   alias Beatseek.Albums
   import BeatseekWeb.Components.AlbumArt
+  import BeatseekWeb.Components.Dropdown
 
   @impl true
   def mount(_params, _session, socket) do
@@ -25,6 +26,15 @@ defmodule BeatseekWeb.ArtistLive.Show do
 
   defp page_title(:show), do: "Show Artist"
   defp page_title(:edit), do: "Edit Artist"
+
+  @impl true
+  def handle_event("verify", %{"id" => id}, socket) do
+    artist = Artists.get_artist!(id)
+    {:ok, _} = Beatseek.Artists.update_artist(artist, %{verified_at: nil})
+    Beatseek.Verification.Spotify.verify(id)
+    {:ok, _} = Artists.update_artist(artist, %{verified_at: DateTime.utc_now()})
+    {:noreply, socket}
+  end
 
   defp list_albums_by_artist(artist) do
     Albums.list_albums_by_artist(artist)

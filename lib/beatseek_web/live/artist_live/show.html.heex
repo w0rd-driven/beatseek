@@ -4,17 +4,14 @@
     <header class="sticky top-0 w-full bg-neutral-200 divide-y-2 pt-2 pb-2 z-50">
       <div class="flex flex-row justify-between items-end">
         <h2 class="text-3xl font-bold"><%= @artist.name %></h2>
-        <button
-          id="artist_menu"
-          type="button"
-          class="group bg-neutral-400 rounded-full px-0.5 py-0.5 text-sm text-left font-medium text-primary-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-200 focus:ring-primary-600"
-          phx-click={}
-          phx-hook="ArtistMenu"
-          data-active-class="bg-gray-100"
-          aria-haspopup="true"
-        >
-          <Heroicons.ellipsis_horizontal solid class="h-6 w-6 stroke-current" />
-        </button>
+        <.dropdown id="artist-menu" name="artist">
+          <:link phx-click={hide_dropdown("#artist-menu-dropdown") |> JS.push("verify", value: %{id: @artist.id})}>
+            <Heroicons.arrow_down_on_square_stack
+              solid
+              class="mr-2 h-6 w-6 stroke-current text-primary-400 group-hover:text-primary-700"
+            /> Verify artist
+          </:link>
+        </.dropdown>
       </div>
       <div class="text-gray-600 text-sm uppercase font-bold"><%= @album_count %> albums</div>
     </header>
