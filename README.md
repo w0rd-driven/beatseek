@@ -25,9 +25,17 @@ Beatseek uncovers the gaps in your music collection by verifying your local file
     * [Day 7 :: Wednesday, January 18](documentation/journal/day07.md)
     * [Day 8 :: Thursday, January 19](documentation/journal/day08.md)
     * [Day 9 :: Thursday, January 20](documentation/day09.md)
-    * 10. [Capstone complete!!](documentation/cohort-retrospective.md)
+    * [Capstone complete!!](documentation/cohort-retrospective.md)
+    * [Public release day](documentation/release-retrospective.md)
 * [AI Artwork](documentation/artwork/index.md)
     * I spent the better part of Saturday trying to generate artwork I may use on a landing page. These would look out of place as a 48x48 logo as they're a little too detailed.
+
+**KNOWN ISSUES**:
+
+* [ ] [The scan upsert is a little too eager](https://github.com/w0rd-driven/beatseek/issues/57)
+    * Every scan acts like an insert or update, overwriting updates that happen during the verify stage.
+    * Scans should be indempotent, the date placeholders changing makes this untrue.
+    * I failed to test multiple workflows until the UI was wired up. Scans and verify steps work perfectly fine in isolation.
 
 ## Phoenix Framework
 
