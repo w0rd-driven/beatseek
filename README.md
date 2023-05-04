@@ -15,6 +15,7 @@ Beatseek uncovers the gaps in your music collection by verifying your local file
     * [Reading ID3 tags](documentation/livebooks/discography_prototype_id3.livemd)
     * [Calling Music APIs](documentation/livebooks/discography_prototype_api.livemd)
 * [Time Tracking](documentation/timetracking.md)
+    * I ended up abandoning this very early but it was helpful in determining when I started.
 * [Developer Journal](documentation/journal/index.md)
     * Day 1-x: Missing as I didn't track my preliminary prototype work very well at all.
     * [Day 2 :: Thursday, January 12](documentation/journal/day02.md)
@@ -24,9 +25,9 @@ Beatseek uncovers the gaps in your music collection by verifying your local file
     * [Day 6 :: Tuesday, January 17](documentation/journal/day06.md)
     * [Day 7 :: Wednesday, January 18](documentation/journal/day07.md)
     * [Day 8 :: Thursday, January 19](documentation/journal/day08.md)
-    * [Day 9 :: Thursday, January 20](documentation/day09.md)
-    * [Capstone complete!!](documentation/cohort-retrospective.md)
-    * [Public release day](documentation/release-retrospective.md)
+    * [Day 9 :: Thursday, January 20](documentation/journal/day09.md)
+    * [Capstone complete!!](documentation/journal/cohort-retrospective.md)
+    * [Public release day](documentation/journal/release-retrospective.md)
 * [AI Artwork](documentation/artwork/index.md)
     * I spent the better part of Saturday trying to generate artwork I may use on a landing page. These would look out of place as a 48x48 logo as they're a little too detailed.
 
