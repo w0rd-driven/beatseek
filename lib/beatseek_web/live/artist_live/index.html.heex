@@ -4,7 +4,7 @@
       <%= if is_nil(artist.image_url) do %>
         <Heroicons.microphone solid class="h-6 w-6 stroke-current" />
       <% else %>
-        <img src={artist.image_url} class="h-6 w-6" loading="lazy" />
+        <img src={artist.image_url} class="h-8 w-8 rounded-full" loading="lazy" />
       <% end %>
     </span>
   </:col>

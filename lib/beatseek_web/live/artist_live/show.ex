@@ -3,6 +3,7 @@ defmodule BeatseekWeb.ArtistLive.Show do
 
   alias Beatseek.Artists
   alias Beatseek.Albums
+  alias Beatseek.Verification.Spotify
   import BeatseekWeb.Components.AlbumArt
   import BeatseekWeb.Components.Dropdown
 
@@ -30,8 +31,8 @@ defmodule BeatseekWeb.ArtistLive.Show do
   @impl true
   def handle_event("verify", %{"id" => id}, socket) do
     artist = Artists.get_artist!(id)
-    {:ok, _} = Beatseek.Artists.update_artist(artist, %{verified_at: nil})
-    Beatseek.Verification.Spotify.verify(id)
+    {:ok, _} = Artists.update_artist(artist, %{verified_at: nil})
+    Spotify.verify(id)
     {:ok, _} = Artists.update_artist(artist, %{verified_at: DateTime.utc_now()})
     {:noreply, socket}
   end
