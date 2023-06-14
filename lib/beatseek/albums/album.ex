@@ -20,5 +20,6 @@ defmodule Beatseek.Albums.Album do
     album
     |> cast(attrs, [:name, :genre, :year, :release_date, :is_owned, :path, :image_url, :artist_id])
     |> validate_required([:name])
+    |> unique_constraint([:name, :artist_id])
   end
 end

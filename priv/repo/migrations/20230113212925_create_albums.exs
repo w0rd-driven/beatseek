@@ -16,6 +16,6 @@ defmodule Beatseek.Repo.Migrations.CreateAlbums do
     end
 
     create index(:albums, [:artist_id])
-    create unique_index(:albums, [:artist_id, :name])
+    create unique_index(:albums, [:name, :artist_id])
   end
 end
