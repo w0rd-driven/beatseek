@@ -48,7 +48,7 @@ defmodule BeatseekWeb.SidebarLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <ul class="flex flex-col sticky top-0 w-full min-w-md">
+    <ul class="flex flex-col">
       <li class="my-px mx-auto pt-4">
         <.link navigate={~p"/"} class="group px-4 text-primary-600 flex flex-row relative">
           <span class="absolute left-4">

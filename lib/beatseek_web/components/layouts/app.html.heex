@@ -6,14 +6,13 @@
         <%= live_render(@socket, BeatseekWeb.SidebarLive,
           id: "sidebar",
           session: %{"current_user" => @current_user, "active_tab" => @active_tab},
-          container: {:div, class: "w-1/3 max-w-xs py-4 pr-8"}
+          container: {:div, class: "w-full py-4 sm:max-w-xs sm:pr-8"}
         ) %>
       <% end %>
-      <%!-- <.sidebar id="sidebar" current_user={@current_user} active_tab={@active_tab} /> --%>
       <%= @inner_content %>
     </div>
   </div>
 </main>
-<footer class="h-12 px-8 w-full sticky bottom-0">
+<footer class="h-12 px-8 w-full sticky bottom-0 bg-neutral-200">
   <.footer_copyright />
 </footer>
