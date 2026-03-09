@@ -34,5 +34,6 @@ npm-debug.log
 
 # Custom
 .elixir_ls/
+.expert/
 .vscode/
 .env
