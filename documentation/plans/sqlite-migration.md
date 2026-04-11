@@ -58,6 +58,16 @@ config :beatseek, Beatseek.Repo,
 **`config/runtime.exs`**
 Detect adapter via `DATABASE_ADAPTER` env var (`"sqlite"` | `"postgres"`, default `"postgres"`). When `sqlite`, configure from `DATABASE_PATH` (default `beatseek.db`); when `postgres`, use existing `DATABASE_URL` logic.
 
+`config/test.exs`**
+Add a commented SQLite example alongside the existing Postgres config:
+```elixir
+config :beatseek, Beatseek.Repo,
+  database: Path.expand("../data/beatseek_test.db", __DIR__),
+  pool_size: 5,
+  pool: Ecto.Adapters.SQL.Sandbox,
+  busy_timeout: 10_000
+```
+
 ### Step 3 — Repo (`lib/beatseek/repo.ex`)
 Select adapter and configure migration path at compile/start time. Set `migration_source` to `"priv/repo/migrations_sqlite"` for SQLite or `"priv/repo/migrations"` for Postgres.
 
