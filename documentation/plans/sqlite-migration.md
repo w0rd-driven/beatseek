@@ -96,9 +96,11 @@ Add `String.downcase/1` to the email normalization step in the changeset to remo
 
 **Format:** JSON (human-readable, portable, no external tooling required).
 
+**Database:** specify whether we export from Postgres or SQLite. Ideally, we could export from Postgres into SQLite or vice versa on the same machine.
+
 Files to create:
-- `lib/mix/tasks/beatseek/db/export.ex` — `mix beatseek.db.export [--output path/to/file.json]`
-- `lib/mix/tasks/beatseek/db/import.ex` — `mix beatseek.db.import [--input path/to/file.json]`
+- `lib/mix/tasks/beatseek/db/export.ex` — `mix beatseek.db.export [--adapter=sqlite] [--output path/to/file.json]`
+- `lib/mix/tasks/beatseek/db/import.ex` — `mix beatseek.db.import [--adapter=sqlite] [--input path/to/file.json]`
 
 Export reads from the configured Repo and serializes artists → albums → notifications (order preserves FKs on import). Import uses `Repo.insert_all` with `on_conflict: :replace_all` to be idempotent.
 
@@ -108,13 +110,19 @@ Export reads from the configured Repo and serializes artists → albums → noti
 ```
 Driven by `DATABASE_ADAPTER=sqlite` env var so existing `mix setup` still works for Postgres.
 
+### Step 8 — Environment Updates (`.env.example`)
+
+Add `DATABASE_ADAPTER=sqlite` to the env variable example file as we use `direnv` to inject these before running the process. This will ensure we run sqlite by default.
+
 ---
 
 ## Files Modified
+- `.env.example` - add `DATABASE_ADAPTER=sqlite`
 - `mix.exs` — add `ecto_sqlite3`, bump Oban
 - `config/config.exs` — adapter-aware Oban engine
 - `config/dev.exs` — SQLite example config
 - `config/runtime.exs` — `DATABASE_ADAPTER` detection + SQLite path config
+- `config/test.exs` — SQLite example config
 - `lib/beatseek/repo.ex` — migration path selection
 - `lib/beatseek/accounts/user.ex` — email lowercase normalization
 
@@ -127,7 +135,7 @@ Driven by `DATABASE_ADAPTER=sqlite` env var so existing `mix setup` still works 
 
 ## Verification
 
-1. **SQLite path:** `DATABASE_ADAPTER=sqlite mix ecto.setup` → creates `beatseek_dev.db`, runs all 5 SQLite migrations, app starts successfully
+1. **SQLite path:** `DATABASE_ADAPTER=sqlite mix ecto.setup` → creates `data/beatseek_dev.db`, runs all 5 SQLite migrations, app starts successfully
 2. **Postgres path:** `mix ecto.setup` (no env var) → existing behavior unchanged
 3. **Email case:** Register with `USER@EXAMPLE.COM`, verify login works with `user@example.com`
 4. **Export:** `mix beatseek.db.export --output /tmp/data.json` → JSON file with artists/albums/notifications
