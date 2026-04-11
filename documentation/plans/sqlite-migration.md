@@ -47,7 +47,7 @@ Add a commented SQLite example alongside the existing Postgres config:
 # SQLite (local, zero-config)
 config :beatseek, Beatseek.Repo,
   adapter: Ecto.Adapters.SQLite3,
-  database: Path.expand("../beatseek_dev.db", __DIR__)
+  database: Path.expand("../data/beatseek_dev.db", __DIR__)
 
 # Postgres (default)
 config :beatseek, Beatseek.Repo,
